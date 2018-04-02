@@ -1,4 +1,4 @@
-package com.gmail.buckartz.roomreservation.controller;
+package com.gmail.buckartz.roomreservation.controller.room;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gmail.buckartz.roomreservation.config.ControllerTestContext;
@@ -9,12 +9,11 @@ import com.gmail.buckartz.roomreservation.service.room.RoomSaveService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -27,9 +26,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class RoomControllerTests extends ControllerTestContext {
     @Autowired
     private ObjectMapper objectMapper;
-
-    @Autowired
-    private Environment env;
 
     @Autowired
     private RoomSaveService roomSaveService;
@@ -78,7 +74,7 @@ public class RoomControllerTests extends ControllerTestContext {
                 .headers(headers)
                 .content(objectMapper.writeValueAsString(roomMapper)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.fieldsViolations.number", is("Room with such number has already existed")));
+                .andExpect(jsonPath("$.fieldsViolations.number", containsInAnyOrder("Room with such number has already existed")));
     }
 
     @Test
@@ -96,7 +92,7 @@ public class RoomControllerTests extends ControllerTestContext {
                 .headers(headers)
                 .content(objectMapper.writeValueAsString(roomMapper)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.fieldsViolations.number", is("Room number must not be empty")));
+                .andExpect(jsonPath("$.fieldsViolations.number", containsInAnyOrder("Room number must not be empty")));
     }
 
     @Test
@@ -115,6 +111,6 @@ public class RoomControllerTests extends ControllerTestContext {
                 .headers(headers)
                 .content(objectMapper.writeValueAsString(roomMapper)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.fieldsViolations.number", is("Size of room number must be less than 6 characters")));
+                .andExpect(jsonPath("$.fieldsViolations.number", containsInAnyOrder("Size of room number must be less than 6 characters")));
     }
 }
