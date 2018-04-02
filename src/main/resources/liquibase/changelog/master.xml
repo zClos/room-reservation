@@ -4,4 +4,5 @@
                     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
     <include file="classpath:liquibase/changelog/release_1.0/1.1_Room_schema_creation.xml"/>
+    <include file="classpath:liquibase/changelog/release_1.0/1.2_Employee_schema_creation.xml"/>
 </databaseChangeLog>
