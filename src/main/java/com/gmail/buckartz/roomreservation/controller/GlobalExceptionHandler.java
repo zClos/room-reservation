@@ -17,8 +17,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -27,8 +28,10 @@ public class GlobalExceptionHandler {
     public ViolationResponse handleException(MethodArgumentNotValidException exception) {
         BindingResult bindingResult = exception.getBindingResult();
 
-        Map<String, String> fields = bindingResult.getFieldErrors().stream().limit(1)
-                .collect(toMap(FieldError::getField, FieldError::getDefaultMessage));
+        Map<String, List<String>> fields = bindingResult.getFieldErrors().stream()
+                .collect(
+                        groupingBy(FieldError::getField,
+                                mapping(FieldError::getDefaultMessage, toList())));
 
         List<String> common = bindingResult.getGlobalErrors().stream()
                 .map(ObjectError::getDefaultMessage)

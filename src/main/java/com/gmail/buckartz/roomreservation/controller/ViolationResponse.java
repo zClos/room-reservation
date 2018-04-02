@@ -10,7 +10,7 @@ import java.util.Map;
 @Getter
 public class ViolationResponse {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private Map<String, String> fieldsViolations;
+    private Map<String, List<String>> fieldsViolations;
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<String> commonViolations;
@@ -22,7 +22,7 @@ public class ViolationResponse {
     public static class ViolationHandlerBuilder {
         private ViolationResponse violationResponse = new ViolationResponse();
 
-        public ViolationHandlerBuilder fields(Map<String, String> fieldsViolations) {
+        public ViolationHandlerBuilder fields(Map<String, List<String>> fieldsViolations) {
             violationResponse.fieldsViolations = fieldsViolations;
             return this;
         }
