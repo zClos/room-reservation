@@ -2,7 +2,6 @@ package com.gmail.buckartz.roomreservation.service.room;
 
 import com.gmail.buckartz.roomreservation.config.UnitTestConfiguration;
 import com.gmail.buckartz.roomreservation.domain.Room;
-import com.gmail.buckartz.roomreservation.service.room.impl.RoomSaveServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,10 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(SpringRunner.class)
 public class RoomServicesTests {
     @Autowired
-    private RoomSaveServiceImpl roomSaveService;
+    private RoomSaveService roomSaveService;
+
+    @Autowired
+    private RoomGetByNumberService getByNumberService;
 
     @Test
     public void saveRoom() {
@@ -24,5 +26,16 @@ public class RoomServicesTests {
                 .build();
         roomSaveService.save(room);
         assertNotNull(room.getId());
+    }
+
+    @Test
+    public void RoomGetByNumber() {
+        Room room = Room.builder()
+                .number("123a")
+                .sitsCount(22)
+                .build();
+        roomSaveService.save(room);
+
+        assertNotNull(getByNumberService.getByNumber(room.getNumber()));
     }
 }
