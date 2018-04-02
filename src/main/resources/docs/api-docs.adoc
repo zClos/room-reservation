@@ -59,6 +59,7 @@ use of HTTP verbs.
 | The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.
 |===
 
+[room-creation]
 == Room creation
 
 Save new room in the system
@@ -73,5 +74,16 @@ include::{snippets}/room-save/http-response.adoc[]
 include::{snippets}/room-save-with-not-unique-number/http-response.adoc[]
 include::{snippets}/room-save-with-empty-number/http-response.adoc[]
 include::{snippets}/room-save-with-grater-size-number/http-response.adoc[]
+
+[employee-creation]
+== Employee creation
+
+Save new employee in the system
+
+.Request
+include::{snippets}/save-employee/http-request.adoc[]
+
+.Success response
+include::{snippets}/save-employee/http-response.adoc[]
 
 Test task:: REST API service for PLAYGENDARY =)
