@@ -86,4 +86,8 @@ include::{snippets}/save-employee/http-request.adoc[]
 .Success response
 include::{snippets}/save-employee/http-response.adoc[]
 
+.Exception responses
+include::{snippets}/save-employee-with-empty-value/http-response.adoc[]
+include::{snippets}/save-employee-with-bad-length-values/http-response.adoc[]
+
 Test task:: REST API service for PLAYGENDARY =)
