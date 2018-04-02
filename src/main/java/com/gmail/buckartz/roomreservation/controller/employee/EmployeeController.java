@@ -44,7 +44,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/{id}/reservation")
-    public ResponseEntity saveEmployeeRoomReservation(@EmployeeIdExistenceConstraint @PathVariable("id") Long id, @RequestBody ReservationMapper mapper) {
+    public ResponseEntity saveEmployeeRoomReservation(@EmployeeIdExistenceConstraint @PathVariable("id") Long id, @Valid @RequestBody ReservationMapper mapper) {
         ReservationMapper reservationMapper = ReservationMapper.builder(mapper)
                 .employeeId(id)
                 .builder();

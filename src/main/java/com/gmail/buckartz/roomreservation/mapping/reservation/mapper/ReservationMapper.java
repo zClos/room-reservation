@@ -1,12 +1,14 @@
 package com.gmail.buckartz.roomreservation.mapping.reservation.mapper;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.gmail.buckartz.roomreservation.validation.room.RoomIdExistenceConstraint;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class ReservationMapper {
+    @RoomIdExistenceConstraint
     private Long roomId;
     private String reservedFrom;
     private String reservedTo;
