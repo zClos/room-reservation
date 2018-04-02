@@ -61,10 +61,17 @@ use of HTTP verbs.
 
 == Room creation
 
+Save new room in the system
+
 .Request
 include::{snippets}/room-save/http-request.adoc[]
 
 .Success response
 include::{snippets}/room-save/http-response.adoc[]
+
+.Exception responses
+include::{snippets}/room-save-with-not-unique-number/http-response.adoc[]
+include::{snippets}/room-save-with-empty-number/http-response.adoc[]
+include::{snippets}/room-save-with-grater-size-number/http-response.adoc[]
 
 Test task:: REST API service for PLAYGENDARY =)
