@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping(value = "/room")
 @DefaultHeaderValues
@@ -23,7 +25,7 @@ public class RoomController {
     private RoomMapping roomMapping;
 
     @PostMapping
-    public ResponseEntity saveRoom(@RequestBody RoomMapper mapper) {
+    public ResponseEntity saveRoom(@Valid @RequestBody RoomMapper mapper) {
         roomSaveService.save(roomMapping.toObject(mapper));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
