@@ -22,6 +22,9 @@ public class RoomServicesTests {
     @Autowired
     private RoomGetByIdService roomGetByIdService;
 
+    @Autowired
+    private RoomGetAllService roomGetAllService;
+
     @Test
     public void saveRoom() {
         Room room = Room.builder()
@@ -52,5 +55,26 @@ public class RoomServicesTests {
         roomSaveService.save(room);
 
         assertEquals(room, roomGetByIdService.getById(room.getId()));
+    }
+
+    @Test
+    public void RoomGetAll() {
+        Room room1 = Room.builder()
+                .number("123a")
+                .sitsCount(22)
+                .build();
+        Room room2 = Room.builder()
+                .number("123b")
+                .sitsCount(21)
+                .build();
+        Room room3 = Room.builder()
+                .number("123c")
+                .sitsCount(20)
+                .build();
+        roomSaveService.save(room1);
+        roomSaveService.save(room2);
+        roomSaveService.save(room3);
+
+        assertEquals(3, roomGetAllService.findAll().size());
     }
 }
