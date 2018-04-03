@@ -1,12 +1,15 @@
 package com.gmail.buckartz.roomreservation.controller.employee;
 
 import com.gmail.buckartz.roomreservation.controller.DefaultHeaderValues;
+import com.gmail.buckartz.roomreservation.domain.Employee;
 import com.gmail.buckartz.roomreservation.domain.Reservation;
 import com.gmail.buckartz.roomreservation.mapping.employee.EmployeeMapping;
 import com.gmail.buckartz.roomreservation.mapping.employee.mapper.EmployeeMapper;
 import com.gmail.buckartz.roomreservation.mapping.reservation.ReservationMapping;
 import com.gmail.buckartz.roomreservation.mapping.reservation.ReservationToJsonListMapping;
 import com.gmail.buckartz.roomreservation.mapping.reservation.mapper.ReservationMapper;
+import com.gmail.buckartz.roomreservation.service.employee.EmployeeGetAllService;
+import com.gmail.buckartz.roomreservation.service.employee.EmployeeGetByIdService;
 import com.gmail.buckartz.roomreservation.service.employee.EmployeeSaveService;
 import com.gmail.buckartz.roomreservation.service.reservation.ReservationGetAllByFilterService;
 import com.gmail.buckartz.roomreservation.service.reservation.ReservationSaveService;
@@ -27,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Controller
 @DefaultHeaderValues
@@ -50,6 +54,12 @@ public class EmployeeController {
 
     @Autowired
     private ReservationGetAllByFilterService getAllByFilterService;
+
+    @Autowired
+    private EmployeeGetAllService getAllService;
+
+    @Autowired
+    private EmployeeGetByIdService employeeGetByIdService;
 
     @PostMapping
     public ResponseEntity saveEmployee(@Valid @RequestBody EmployeeMapper employeeMapper) {
@@ -79,5 +89,17 @@ public class EmployeeController {
                 .build();
         List<Reservation> list = getAllByFilterService.getAllByFilter(filters);
         return new ResponseEntity(reservationToJsonListMapping.toJson(list), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Employee> getEmployeeById(@EmployeeIdExistenceConstraint @PathVariable("id") Long id) {
+        Employee employees = employeeGetByIdService.getById(id);
+        return new ResponseEntity<>(employees, HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<Set<Employee>> getAllRooms() {
+        Set<Employee> employees = getAllService.findAll();
+        return new ResponseEntity<>(employees, HttpStatus.OK);
     }
 }
