@@ -19,6 +19,9 @@ public class EmployeeSaveServiceTest {
     @Autowired
     private EmployeeGetByIdService employeeGetByIdService;
 
+    @Autowired
+    private EmployeeGetAllService getAllService;
+
     @Test
     public void saveEmployee() {
         Employee employee = Employee.builder()
@@ -39,5 +42,21 @@ public class EmployeeSaveServiceTest {
         employeeSaveService.save(employee);
 
         assertEquals(employee, employeeGetByIdService.getById(employee.getId()));
+    }
+
+    @Test
+    public void getEmployeeAll() {
+        Employee employee1 = Employee.builder()
+                .firstName("Donald")
+                .lastName("Tramp")
+                .build();
+        Employee employee2 = Employee.builder()
+                .firstName("Vasya")
+                .lastName("Pupkin")
+                .build();
+        employeeSaveService.save(employee1);
+        employeeSaveService.save(employee2);
+
+        assertEquals(2, getAllService.findAll().size());
     }
 }
