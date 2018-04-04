@@ -107,4 +107,7 @@ include::{snippets}/save-employee-room-reservation/http-request.adoc[]
 .Success response
 include::{snippets}/save-employee-room-reservation/http-response.adoc[]
 
+.Exception responses
+include::{snippets}/save-employee-room-reservation-for-not-exist-one/http-response.adoc[]
+
 Test task:: REST API service for PLAYGENDARY =)
