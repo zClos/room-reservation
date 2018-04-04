@@ -90,4 +90,21 @@ include::{snippets}/save-employee/http-response.adoc[]
 include::{snippets}/save-employee-with-empty-value/http-response.adoc[]
 include::{snippets}/save-employee-with-bad-length-values/http-response.adoc[]
 
+[employee-creation]
+== Room reservation creation
+
+Save new room reservation by user's id
+
+Request has the parameter *id*. It's mean that employee will be owner of this reservation.
+None will be able to reserve room with an identifier in the request's body during that time.
+``
+/employee/{id}/reservation
+``
+
+.Request
+include::{snippets}/save-employee-room-reservation/http-request.adoc[]
+
+.Success response
+include::{snippets}/save-employee-room-reservation/http-response.adoc[]
+
 Test task:: REST API service for PLAYGENDARY =)
