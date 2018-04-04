@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @UnitTestConfiguration
@@ -14,6 +15,9 @@ import static org.junit.Assert.assertNotNull;
 public class EmployeeSaveServiceTest {
     @Autowired
     private EmployeeSaveService employeeSaveService;
+
+    @Autowired
+    private EmployeeGetByIdService employeeGetByIdService;
 
     @Test
     public void saveEmployee() {
@@ -24,5 +28,16 @@ public class EmployeeSaveServiceTest {
 
         employeeSaveService.save(employee);
         assertNotNull(employee.getId());
+    }
+
+    @Test
+    public void getEmployeeById() {
+        Employee employee = Employee.builder()
+                .firstName("Ivan")
+                .lastName("Ivanov")
+                .build();
+        employeeSaveService.save(employee);
+
+        assertEquals(employee, employeeGetByIdService.getById(employee.getId()));
     }
 }

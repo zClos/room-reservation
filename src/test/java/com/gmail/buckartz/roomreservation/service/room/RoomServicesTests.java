@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @UnitTestConfiguration
@@ -17,6 +18,9 @@ public class RoomServicesTests {
 
     @Autowired
     private RoomGetByNumberService getByNumberService;
+
+    @Autowired
+    private RoomGetByIdService roomGetByIdService;
 
     @Test
     public void saveRoom() {
@@ -37,5 +41,16 @@ public class RoomServicesTests {
         roomSaveService.save(room);
 
         assertNotNull(getByNumberService.getByNumber(room.getNumber()));
+    }
+
+    @Test
+    public void getRoomById() {
+        Room room = Room.builder()
+                .number("123b")
+                .sitsCount(6)
+                .build();
+        roomSaveService.save(room);
+
+        assertEquals(room, roomGetByIdService.getById(room.getId()));
     }
 }
