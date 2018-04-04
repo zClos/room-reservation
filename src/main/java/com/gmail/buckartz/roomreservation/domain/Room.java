@@ -1,5 +1,6 @@
 package com.gmail.buckartz.roomreservation.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 
 import javax.persistence.Column;
@@ -7,8 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "room", schema = "public")
@@ -24,6 +28,10 @@ public class Room {
 
     @Column(name = "sits_count")
     private Integer sitsCount;
+
+    @OneToMany(mappedBy = "room")
+    @JsonBackReference
+    private Set<Reservation> reservations = new HashSet<>();
 
     public static RoomBuilder builder() {
         return new RoomBuilder();

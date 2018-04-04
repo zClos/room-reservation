@@ -1,5 +1,7 @@
 package com.gmail.buckartz.roomreservation.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,13 +10,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "employee")
 @Getter
 @Setter
+@EqualsAndHashCode(exclude = "reservations")
 public class Employee {
     @Id
     @SequenceGenerator(name = "employee_seq", sequenceName = "employee_seq", allocationSize = 1)
@@ -26,6 +32,10 @@ public class Employee {
 
     @Column(name = "last_name")
     private String lastName;
+
+    @OneToMany(mappedBy = "employee")
+    @JsonBackReference
+    private Set<Reservation> reservations = new HashSet<>();
 
     public static EmployeeBuilder builder() {
         return new EmployeeBuilder();
