@@ -24,8 +24,7 @@ public class ReservationMappingImpl implements ReservationMapping {
     @Override
     public Reservation toObject(ReservationMapper from) {
         return Reservation.builder()
-                .employee(employeeGetByIdServiceImpl.getById(Optional.of(from.getEmployeeId())
-                        .orElseThrow(() -> new NullPointerException("Can't be null"))))
+                .employee(employeeGetByIdServiceImpl.getById(from.getEmployeeId()))
                 .room(roomGetByIdService.getById(Optional.of(from.getRoomId())
                         .orElseThrow(() -> new NullPointerException("Can't be null"))))
                 .reservedFrom(Timestamp.valueOf(LocalDateTime.parse(from.getReservedFrom())))
