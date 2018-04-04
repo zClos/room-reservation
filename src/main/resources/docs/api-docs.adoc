@@ -90,6 +90,37 @@ include::{snippets}/save-employee/http-response.adoc[]
 include::{snippets}/save-employee-with-empty-value/http-response.adoc[]
 include::{snippets}/save-employee-with-bad-length-values/http-response.adoc[]
 
+[get-employee-by-id]
+=== Get employee by id
+
+Request has the parameter *id*.
+
+``
+/employee/{id}
+``
+
+Get one unique employee saved in the system by id
+
+.Request
+include::{snippets}/get-employee-by-id/http-request.adoc[]
+
+.Success response
+include::{snippets}/get-employee-by-id/http-response.adoc[]
+
+.Exception responses
+include::{snippets}/get-employee-by-id-not-exist/http-response.adoc[]
+
+[get-all-employees]
+=== Get all employees
+
+Get all employees saved in the system by id
+
+.Request
+include::{snippets}/get-employee-all/http-request.adoc[]
+
+.Success response
+include::{snippets}/get-employee-all/http-response.adoc[]
+
 [employee-creation]
 == Room reservation creation
 

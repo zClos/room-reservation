@@ -542,4 +542,76 @@ public class EmployeeControllerTests extends ControllerTestContext {
                                         fieldWithPath("[].reservedTo").description(""),
                                         fieldWithPath("[].reason").description(""))));
     }
+
+    @Test
+    public void getEmployeeById() throws Exception {
+        Employee employee = Employee.builder()
+                .firstName("Alex")
+                .lastName("Pit")
+                .build();
+        employeeSaveService.save(employee);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Accept-Charset", "utf-8");
+
+        getMockMvc().perform(get("/employee/{id}", employee.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(headers))
+                .andExpect(status().isOk())
+                .andDo(getDocumentHandler()
+                        .document(
+                                responseFields(
+                                        fieldWithPath("id").description(""),
+                                        fieldWithPath("firstName").description(""),
+                                        fieldWithPath("lastName").description(""))));
+    }
+
+    @Test
+    public void getEmployeeByIdNotExist() throws Exception {
+        Employee employee = Employee.builder()
+                .firstName("Ololo")
+                .lastName("Trololo")
+                .build();
+        employeeSaveService.save(employee);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Accept-Charset", "utf-8");
+
+        getMockMvc().perform(get("/employee/{id}", employee.getId() + 1)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(headers))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.commonViolations", containsInAnyOrder("Employee with id " + (employee.getId() + 1) + " doesn't exist")));
+    }
+
+    @Test
+    public void getEmployeeAll() throws Exception {
+        Employee employee1 = Employee.builder()
+                .firstName("Alex")
+                .lastName("Pit")
+                .build();
+        Employee employee2 = Employee.builder()
+                .firstName("Bred")
+                .lastName("Pit")
+                .build();
+        employeeSaveService.save(employee1);
+        employeeSaveService.save(employee2);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Accept-Charset", "utf-8");
+
+        getMockMvc().perform(get("/employee")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(headers))
+                .andExpect(status().isOk())
+                .andDo(getDocumentHandler()
+                        .document(
+                                responseFields(
+                                        fieldWithPath("[].id").description(""),
+                                        fieldWithPath("[].firstName").description(""),
+                                        fieldWithPath("[].lastName").description(""))));
+    }
 }
