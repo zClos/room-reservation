@@ -181,4 +181,42 @@ public class EmployeeControllerTests extends ControllerTestContext {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.commonViolations", containsInAnyOrder("Employee with id " + (employee.getId() + 1) + " doesn't exist")));
     }
+
+    @Test
+    public void saveEmployeeRoomReservationForNotExistRoom() throws Exception {
+        Employee employee = Employee.builder()
+                .firstName("Big")
+                .lastName("Boss")
+                .build();
+        employeeSaveService.save(employee);
+
+        Room room = Room.builder()
+                .number("11")
+                .sitsCount(5)
+                .build();
+        roomSaveService.save(room);
+
+        LocalDateTime dateTimeFrom = LocalDateTime.now();
+        dateTimeFrom = dateTimeFrom.minusSeconds(dateTimeFrom.getSecond()).minusNanos(dateTimeFrom.getNano());
+        LocalDateTime dateTimeTo = dateTimeFrom.minusMinutes(30);
+
+        ReservationMapper mapper = ReservationMapper.builder()
+                .roomId(room.getId() + 1)
+                .reservedFrom(dateTimeFrom.toString())
+                .reservedTo(dateTimeTo.toString())
+                .reason("Daily Planing")
+                .builder();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Accept-Charset", "utf-8");
+
+        getMockMvc().perform(post("/employee/{id}/reservation", employee.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(headers)
+                .content(objectMapper.writeValueAsString(mapper)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.fieldsViolations.roomId",
+                        containsInAnyOrder("Room with id " + (room.getId() + 1) + " doesn't exist")));
+    }
 }
