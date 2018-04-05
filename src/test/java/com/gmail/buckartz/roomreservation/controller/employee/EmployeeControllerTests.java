@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gmail.buckartz.roomreservation.config.ControllerTestContext;
 import com.gmail.buckartz.roomreservation.config.IntegrationWebTestConfiguration;
 import com.gmail.buckartz.roomreservation.domain.Employee;
+import com.gmail.buckartz.roomreservation.domain.Reservation;
 import com.gmail.buckartz.roomreservation.domain.Room;
 import com.gmail.buckartz.roomreservation.mapping.employee.mapper.EmployeeMapper;
 import com.gmail.buckartz.roomreservation.mapping.reservation.ReservationMapping;
@@ -18,12 +19,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -377,5 +382,100 @@ public class EmployeeControllerTests extends ControllerTestContext {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.commonViolations",
                         containsInAnyOrder("Room has already reserved for that period, or period is bad")));
+    }
+
+    @Test
+    public void getAllEmployeeRoomReservations() throws Exception {
+        Employee employee = Employee.builder()
+                .firstName("Alen")
+                .lastName("Delon")
+                .build();
+        employeeSaveService.save(employee);
+
+        Reservation reservation1 = Reservation.builder()
+                .room(Room.builder()
+                        .number("12")
+                        .build())
+                .employee(employee)
+                .reservedFrom(Timestamp.valueOf(LocalDateTime.parse("2018-04-04T12:52", DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                .reservedTo(Timestamp.valueOf(LocalDateTime.parse("2018-04-04T13:50", DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                .reason("Dance")
+                .build();
+        reservationSaveService.save(reservation1);
+
+        Reservation reservation2 = Reservation.builder()
+                .room(Room.builder()
+                        .number("13")
+                        .build())
+                .employee(employee)
+                .reservedFrom(Timestamp.valueOf(LocalDateTime.parse("2018-04-04T11:52", DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                .reservedTo(Timestamp.valueOf(LocalDateTime.parse("2018-05-04T14:50", DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                .reason("Dance Too")
+                .build();
+        reservationSaveService.save(reservation2);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Accept-Charset", "utf-8");
+
+        getMockMvc().perform(get("/employee/{id}/reservation", employee.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(headers))
+                .andExpect(status().isOk())
+                .andDo(getDocumentHandler()
+                        .document(
+                                responseFields(
+                                        fieldWithPath("[].id").description(""),
+                                        fieldWithPath("[].room.id").description(""),
+                                        fieldWithPath("[].room.number").description(""),
+                                        fieldWithPath("[].room.sitsCount").description(""),
+                                        fieldWithPath("[].employee.id").description(""),
+                                        fieldWithPath("[].employee.firstName").description(""),
+                                        fieldWithPath("[].employee.lastName").description(""),
+                                        fieldWithPath("[].reservedFrom").description(""),
+                                        fieldWithPath("[].reservedTo").description(""),
+                                        fieldWithPath("[].reason").description(""))));
+    }
+
+    @Test
+    public void getAllEmployeeRoomReservationsNotExistsEmployee() throws Exception {
+        Employee employee = Employee.builder()
+                .firstName("Alen")
+                .lastName("Delon")
+                .build();
+        employeeSaveService.save(employee);
+
+        Reservation reservation1 = Reservation.builder()
+                .room(Room.builder()
+                        .number("12")
+                        .build())
+                .employee(employee)
+                .reservedFrom(Timestamp.valueOf(LocalDateTime.parse("2018-04-04T12:52", DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                .reservedTo(Timestamp.valueOf(LocalDateTime.parse("2018-04-04T13:50", DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                .reason("Dance")
+                .build();
+        reservationSaveService.save(reservation1);
+
+        Reservation reservation2 = Reservation.builder()
+                .room(Room.builder()
+                        .number("13")
+                        .build())
+                .employee(employee)
+                .reservedFrom(Timestamp.valueOf(LocalDateTime.parse("2018-04-04T11:52", DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                .reservedTo(Timestamp.valueOf(LocalDateTime.parse("2018-05-04T14:50", DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                .reason("Dance Too")
+                .build();
+        reservationSaveService.save(reservation2);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Accept-Charset", "utf-8");
+
+        getMockMvc().perform(get("/employee/{id}/reservation", employee.getId() + 1)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(headers))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.commonViolations",
+                        containsInAnyOrder("Employee with id " + (employee.getId() + 1) + " doesn't exist")));
     }
 }
