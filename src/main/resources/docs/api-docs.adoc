@@ -108,7 +108,11 @@ include::{snippets}/save-employee-room-reservation/http-request.adoc[]
 include::{snippets}/save-employee-room-reservation/http-response.adoc[]
 
 .Exception responses
-include::{snippets}/save-employee-room-reservation-for-not-exist-one/http-response.adoc[]
+include::{snippets}/save-employee-room-reservation-for-not-exist-employee/http-response.adoc[]
 include::{snippets}/save-employee-room-reservation-for-not-exist-room/http-response.adoc[]
+include::{snippets}/save-employee-room-reservation-empty-values/http-response.adoc[]
+include::{snippets}/save-employee-room-reservation-correct-values-group/http-response.adoc[]
+include::{snippets}/save-employee-room-reservation-out-of-work-time/http-response.adoc[]
+include::{snippets}/save-employee-room-reservation-in-exist-period/http-response.adoc[]
 
 Test task:: REST API service for PLAYGENDARY =)
