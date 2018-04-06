@@ -127,4 +127,33 @@ include::{snippets}/get-all-employee-room-reservations/http-request.adoc[]
 .Success response
 include::{snippets}/get-all-employee-room-reservations/http-response.adoc[]
 
+.Exception responses
+include::{snippets}/get-all-employee-room-reservations-not-exists-employee/http-response.adoc[]
+
+== Getting list of reserved rooms by employee for period
+
+``
+/employee/{id}/reservation?from={reservedFrom}&to={reservedTo}&order={order}
+``
+
+Request parameters show interested period.
+
+ * _{reservedFrom}_ - parameter shows beginning of the period, format ISO _YYYY-MM-DD{T}HH:MM:SS_ (T - should be without braces)
+ * _{reservedTo}_ - parameter shows ending of the period, format ISO _YYYY-MM-DD{T}HH:MM:SS_ (T - should be without braces)
+ * _{order}_ - parameter applies sorting to the data list by the reservation's beginning date:
+ ** ASC - from earlier to later one
+ ** DESC - from later to earlier one
+
+The parameters are optional. _Missing of the parameters_
+
+ * _{reservedFrom}_ - missed so will be shown reservations from this date
+ * _{reservedTo}_ - missed so will be shown reservations up to this date
+ * _{order}_ - missed so will be shown list sorted by default by id
+
+.Request
+include::{snippets}/get-all-employee-room-reservations-by-period-and-order-by-desc/http-request.adoc[]
+
+.Success response
+include::{snippets}/get-all-employee-room-reservations-by-period-and-order-by-desc/http-response.adoc[]
+
 Test task:: REST API service for PLAYGENDARY =)

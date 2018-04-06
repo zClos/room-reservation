@@ -53,7 +53,15 @@ public class EmployeeControllerTests extends ControllerTestContext {
 
     private LocalDateTime getTestDateTime() {
         return Optional.of(LocalDateTime.now()).map(now -> {
-            if (now.plusHours(2).getHour() > 18 || now.getHour() < 9) {
+            if (now.plusHours(2).getHour() > 18 ||
+                    now.getHour() < 9 ||
+                    now.getDayOfMonth() < now.plusHours(2).getDayOfMonth()) {
+                if (now.getDayOfWeek().getValue() == 5 ||
+                        now.getDayOfWeek().getValue() == 6 ||
+                        now.getDayOfWeek().getValue() == 7) {
+                    return LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth() + 3,
+                            12, 00);
+                }
                 return LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth() + 1,
                         12, 00);
             }
@@ -477,5 +485,61 @@ public class EmployeeControllerTests extends ControllerTestContext {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.commonViolations",
                         containsInAnyOrder("Employee with id " + (employee.getId() + 1) + " doesn't exist")));
+    }
+
+    @Test
+    public void getAllEmployeeRoomReservationsByPeriodAndOrderByDesc() throws Exception {
+        Employee employee = Employee.builder()
+                .firstName("Alen")
+                .lastName("Delon")
+                .build();
+        employeeSaveService.save(employee);
+
+        Reservation reservation1 = Reservation.builder()
+                .room(Room.builder()
+                        .number("12")
+                        .build())
+                .employee(employee)
+                .reservedFrom(Timestamp.valueOf(LocalDateTime.parse("2018-04-04T11:52")))
+                .reservedTo(Timestamp.valueOf(LocalDateTime.parse("2018-04-04T13:50")))
+                .reason("Dance")
+                .build();
+        reservationSaveService.save(reservation1);
+
+        Reservation reservation2 = Reservation.builder()
+                .room(Room.builder()
+                        .number("13")
+                        .build())
+                .employee(employee)
+                .reservedFrom(Timestamp.valueOf(LocalDateTime.parse("2018-05-04T11:52")))
+                .reservedTo(Timestamp.valueOf(LocalDateTime.parse("2018-05-04T14:50")))
+                .reason("Dance Too")
+                .build();
+        reservationSaveService.save(reservation2);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Accept-Charset", "utf-8");
+
+        getMockMvc().perform(get("/employee/{id}/reservation", employee.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(headers)
+                .param("from", "2018-04-04T12:00")
+                .param("to", "2018-05-04T12:00")
+                .param("order", "DESC"))
+                .andExpect(status().isOk())
+                .andDo(getDocumentHandler()
+                        .document(
+                                responseFields(
+                                        fieldWithPath("[].id").description(""),
+                                        fieldWithPath("[].room.id").description(""),
+                                        fieldWithPath("[].room.number").description(""),
+                                        fieldWithPath("[].room.sitsCount").description(""),
+                                        fieldWithPath("[].employee.id").description(""),
+                                        fieldWithPath("[].employee.firstName").description(""),
+                                        fieldWithPath("[].employee.lastName").description(""),
+                                        fieldWithPath("[].reservedFrom").description(""),
+                                        fieldWithPath("[].reservedTo").description(""),
+                                        fieldWithPath("[].reason").description(""))));
     }
 }
