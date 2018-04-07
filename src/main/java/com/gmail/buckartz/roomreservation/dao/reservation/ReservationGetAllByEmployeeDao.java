@@ -7,5 +7,5 @@ import java.util.List;
 
 @Repository
 public interface ReservationGetAllByEmployeeDao extends org.springframework.data.repository.Repository<Reservation, Long> {
-    List<Reservation> getAllByEmployeeId(Long id);
+    List<Reservation> findAllByEmployeeId(Long id);
 }

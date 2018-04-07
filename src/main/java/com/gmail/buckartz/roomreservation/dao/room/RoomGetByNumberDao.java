@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RoomGetByNumberDao extends org.springframework.data.repository.Repository<Room, String> {
-    Room getByNumber(String number);
+    Room findByNumber(String number);
 }

@@ -41,7 +41,7 @@ public class EmployeeSaveServiceTest {
                 .build();
         employeeSaveService.save(employee);
 
-        assertEquals(employee, employeeGetByIdService.getById(employee.getId()));
+        assertEquals(employee, employeeGetByIdService.findById(employee.getId()));
     }
 
     @Test

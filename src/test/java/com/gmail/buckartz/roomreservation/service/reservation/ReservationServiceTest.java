@@ -131,7 +131,7 @@ public class ReservationServiceTest {
                 .build();
         reservationSaveService.save(reservation2);
 
-        List<Reservation> reservationList = allByEmployeeIdService.getAllByParentId(employee.getId());
+        List<Reservation> reservationList = allByEmployeeIdService.findAllByParentId(employee.getId());
 
         assertEquals(2, reservationList.size());
         assertTrue(reservationList.contains(reservation1));
@@ -184,7 +184,7 @@ public class ReservationServiceTest {
                 .from("2018-05-03T12:52")
                 .to("2018-06-04T14:50")
                 .build();
-        List<Reservation> reservationList = getAllByFilterService.getAllByFilter(filters);
+        List<Reservation> reservationList = getAllByFilterService.findAllByFilter(filters);
 
         assertEquals(2, reservationList.size());
         assertTrue(reservationList.get(0).equals(reservation1));
@@ -238,7 +238,7 @@ public class ReservationServiceTest {
                 .to("2018-05-03T13:50")
                 .order("asc")
                 .build();
-        List<Reservation> reservationList = getAllByFilterService.getAllByFilter(filtersASC);
+        List<Reservation> reservationList = getAllByFilterService.findAllByFilter(filtersASC);
 
         assertEquals(2, reservationList.size());
         assertEquals(reservation2, reservationList.get(0));
@@ -251,7 +251,7 @@ public class ReservationServiceTest {
                 .to("2018-06-04T14:50")
                 .order("desc")
                 .build();
-        List<Reservation> reservationList2 = getAllByFilterService.getAllByFilter(filtersDESC);
+        List<Reservation> reservationList2 = getAllByFilterService.findAllByFilter(filtersDESC);
 
         assertEquals(3, reservationList2.size());
         assertEquals(reservation3, reservationList2.get(0));

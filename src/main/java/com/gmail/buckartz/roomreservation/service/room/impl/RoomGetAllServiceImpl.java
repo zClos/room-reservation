@@ -6,15 +6,17 @@ import com.gmail.buckartz.roomreservation.service.room.RoomGetAllService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Set;
 
 @Service
+@Transactional
 public class RoomGetAllServiceImpl implements RoomGetAllService {
     @Autowired
-    private RoomGetAllDao roomGetAllDao;
+    private RoomGetAllDao getAllDao;
 
     @Override
     public Set<Room> findAll() {
-        return roomGetAllDao.findAll();
+        return getAllDao.findAll();
     }
 }

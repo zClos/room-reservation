@@ -18,6 +18,6 @@ public class RoomIdExistenceValidator implements ConstraintValidator<RoomIdExist
 
     @Override
     public boolean isValid(Long value, ConstraintValidatorContext context) {
-        return getByIdService.getById(value) != null;
+        return getByIdService.findById(value) != null;
     }
 }

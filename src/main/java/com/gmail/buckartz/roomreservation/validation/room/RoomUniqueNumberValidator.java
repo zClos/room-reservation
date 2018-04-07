@@ -18,6 +18,6 @@ public class RoomUniqueNumberValidator implements ConstraintValidator<RoomUnique
 
     @Override
     public boolean isValid(String number, ConstraintValidatorContext context) {
-        return roomGetByNumberService.getByNumber(number) == null;
+        return roomGetByNumberService.findByNumber(number) == null;
     }
 }

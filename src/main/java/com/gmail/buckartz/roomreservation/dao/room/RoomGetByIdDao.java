@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RoomGetByIdDao extends org.springframework.data.repository.Repository<Room, Long> {
-    Room getById(Long id);
+    Room findById(Long id);
 }

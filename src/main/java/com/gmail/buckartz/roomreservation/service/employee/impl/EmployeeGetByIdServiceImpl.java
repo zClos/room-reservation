@@ -6,13 +6,16 @@ import com.gmail.buckartz.roomreservation.service.employee.EmployeeGetByIdServic
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
+@Transactional
 public class EmployeeGetByIdServiceImpl implements EmployeeGetByIdService {
     @Autowired
     private EmployeeGetByIdDao getByIdDao;
 
     @Override
-    public Employee getById(Long id) {
-        return getByIdDao.getById(id);
+    public Employee findById(Long id) {
+        return getByIdDao.findById(id);
     }
 }

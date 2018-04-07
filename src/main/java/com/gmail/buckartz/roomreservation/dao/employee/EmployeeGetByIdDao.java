@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EmployeeGetByIdDao extends org.springframework.data.repository.Repository<Employee, Long> {
-    Employee getById(Long id);
+    Employee findById(Long id);
 }

@@ -12,10 +12,10 @@ import javax.transaction.Transactional;
 @Transactional
 public class RoomSaveServiceImpl implements RoomSaveService {
     @Autowired
-    private RoomSaveDao roomSaveDao;
+    private RoomSaveDao saveDao;
 
     @Override
     public void save(Room room) {
-        roomSaveDao.save(room);
+        saveDao.save(room);
     }
 }

@@ -19,7 +19,6 @@ import com.gmail.buckartz.roomreservation.validation.reservations.DateFormatCons
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,13 +26,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-@Controller
+@RestController
 @DefaultHeaderValues
 @RequestMapping("/employee")
 @Validated
@@ -78,28 +78,28 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}/reservation")
-    public ResponseEntity<List<Reservation>> getAllEmployeeRoomReservations(@EmployeeIdExistenceConstraint @PathVariable("id") Long id,
-                                                                            @DateFormatConstraint(required = false) @RequestParam("from") Optional<String> from,
-                                                                            @DateFormatConstraint(required = false) @RequestParam("to") Optional<String> to,
-                                                                            @RequestParam("order") Optional<String> order) {
+    public ResponseEntity<List<Reservation>> findAllEmployeeRoomReservations(@EmployeeIdExistenceConstraint @PathVariable("id") Long id,
+                                                                             @DateFormatConstraint(required = false) @RequestParam("from") Optional<String> from,
+                                                                             @DateFormatConstraint(required = false) @RequestParam("to") Optional<String> to,
+                                                                             @RequestParam("order") Optional<String> order) {
         ReservationSearchFilters filters = ReservationSearchFilters.builder()
                 .id(id)
                 .from(from.orElse(null))
                 .to(to.orElse(null))
                 .order(order.orElse(null))
                 .build();
-        List<Reservation> list = getAllByFilterService.getAllByFilter(filters);
+        List<Reservation> list = getAllByFilterService.findAllByFilter(filters);
         return new ResponseEntity(reservationToJsonListMapping.toJson(list), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> getEmployeeById(@EmployeeIdExistenceConstraint @PathVariable("id") Long id) {
-        Employee employees = employeeGetByIdService.getById(id);
+    public ResponseEntity<Employee> findEmployeeById(@EmployeeIdExistenceConstraint @PathVariable("id") Long id) {
+        Employee employees = employeeGetByIdService.findById(id);
         return new ResponseEntity<>(employees, HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<Set<Employee>> getAllRooms() {
+    public ResponseEntity<Set<Employee>> findAllRooms() {
         Set<Employee> employees = getAllService.findAll();
         return new ResponseEntity<>(employees, HttpStatus.OK);
     }

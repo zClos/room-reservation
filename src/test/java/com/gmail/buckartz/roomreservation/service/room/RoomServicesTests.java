@@ -43,7 +43,7 @@ public class RoomServicesTests {
                 .build();
         roomSaveService.save(room);
 
-        assertNotNull(getByNumberService.getByNumber(room.getNumber()));
+        assertNotNull(getByNumberService.findByNumber(room.getNumber()));
     }
 
     @Test
@@ -54,7 +54,7 @@ public class RoomServicesTests {
                 .build();
         roomSaveService.save(room);
 
-        assertEquals(room, roomGetByIdService.getById(room.getId()));
+        assertEquals(room, roomGetByIdService.findById(room.getId()));
     }
 
     @Test

@@ -21,6 +21,6 @@ public class EmployeeIdExistenceValidator implements ConstraintValidator<Employe
         if (value == null) {
             return false;
         }
-        return getByIdService.getById(value) != null;
+        return getByIdService.findById(value) != null;
     }
 }

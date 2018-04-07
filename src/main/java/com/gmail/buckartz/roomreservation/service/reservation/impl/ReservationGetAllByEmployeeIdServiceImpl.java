@@ -6,15 +6,17 @@ import com.gmail.buckartz.roomreservation.service.reservation.ReservationGetAllB
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class ReservationGetAllByEmployeeIdServiceImpl implements ReservationGetAllByEmployeeIdService {
     @Autowired
     private ReservationGetAllByEmployeeDao getAllByEmployee;
 
     @Override
-    public List<Reservation> getAllByParentId(Long id) {
-        return getAllByEmployee.getAllByEmployeeId(id);
+    public List<Reservation> findAllByParentId(Long id) {
+        return getAllByEmployee.findAllByEmployeeId(id);
     }
 }

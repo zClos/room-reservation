@@ -39,7 +39,7 @@ public class RoomController {
     }
 
     @GetMapping
-    public ResponseEntity<Set<Room>> getAllRooms() {
+    public ResponseEntity<Set<Room>> findAllRooms() {
         Set<Room> rooms = getAllService.findAll();
         return new ResponseEntity<>(rooms, HttpStatus.OK);
     }

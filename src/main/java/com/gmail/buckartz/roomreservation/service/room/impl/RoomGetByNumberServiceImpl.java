@@ -6,13 +6,16 @@ import com.gmail.buckartz.roomreservation.service.room.RoomGetByNumberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
+@Transactional
 public class RoomGetByNumberServiceImpl implements RoomGetByNumberService {
     @Autowired
     private RoomGetByNumberDao getByNumberDao;
 
     @Override
-    public Room getByNumber(String number) {
-        return getByNumberDao.getByNumber(number);
+    public Room findByNumber(String number) {
+        return getByNumberDao.findByNumber(number);
     }
 }

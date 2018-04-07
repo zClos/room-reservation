@@ -14,5 +14,5 @@ public interface ReservationGetAllByRoomAndPeriodDao extends org.springframework
             " OR ((res.reservedFrom BETWEEN :reservedFrom AND :reservedTo)" +
             " OR (res.reservedTo BETWEEN :reservedFrom AND :reservedTo))" +
             " AND res.room.id = :id")
-    int getAllByRoomIdAndPeriod(@Param("id") Long id, @Param("reservedFrom") Timestamp reservedFrom, @Param("reservedTo") Timestamp reservedTo);
+    int findAllByRoomIdAndPeriod(@Param("id") Long id, @Param("reservedFrom") Timestamp reservedFrom, @Param("reservedTo") Timestamp reservedTo);
 }

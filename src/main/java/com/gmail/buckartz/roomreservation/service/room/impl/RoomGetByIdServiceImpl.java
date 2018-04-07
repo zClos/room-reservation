@@ -6,13 +6,16 @@ import com.gmail.buckartz.roomreservation.service.room.RoomGetByIdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
+@Transactional
 public class RoomGetByIdServiceImpl implements RoomGetByIdService {
     @Autowired
-    private RoomGetByIdDao roomGetByIdDao;
+    private RoomGetByIdDao getByIdDao;
 
     @Override
-    public Room getById(Long id) {
-        return roomGetByIdDao.getById(id);
+    public Room findById(Long id) {
+        return getByIdDao.findById(id);
     }
 }

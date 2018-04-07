@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 import static com.gmail.buckartz.roomreservation.dao.secifications.reservation.ReservationSoftBorderFilterSpecification.andSpecifications;
@@ -17,12 +18,13 @@ import static com.gmail.buckartz.roomreservation.dao.secifications.reservation.R
 import static com.gmail.buckartz.roomreservation.dao.secifications.reservation.ReservationSoftBorderFilterSpecification.reservedToBetween;
 
 @Service
+@Transactional
 public class ReservationGetAllByFilterServiceImpl implements ReservationGetAllByFilterService {
     @Autowired
     private ReservationGettingFilteredDao gettingFilteredDao;
 
     @Override
-    public List<Reservation> getAllByFilter(ReservationSearchFilters searchFilters) {
+    public List<Reservation> findAllByFilter(ReservationSearchFilters searchFilters) {
         return gettingFilteredDao.findAll(
                 andSpecifications(
                         employeeId(searchFilters.getId()),

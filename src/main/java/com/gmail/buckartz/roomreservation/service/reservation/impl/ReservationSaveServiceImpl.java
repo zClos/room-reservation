@@ -6,7 +6,10 @@ import com.gmail.buckartz.roomreservation.service.reservation.ReservationSaveSer
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
+@Transactional
 public class ReservationSaveServiceImpl implements ReservationSaveService {
     @Autowired
     private ReservationSaveDao saveDao;
