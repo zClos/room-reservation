@@ -12,23 +12,22 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static java.sql.Timestamp.valueOf;
+import static java.time.LocalDateTime.parse;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 @UnitTestConfiguration
 @RunWith(SpringRunner.class)
-public class ReservationServiceTest {
+public class ReservationGetServiceTests {
     @Autowired
     private ReservationSaveService reservationSaveService;
 
     @Autowired
     private RoomSaveService roomSaveService;
+
     @Autowired
     private ReservationGetCountByRoomAndPeriodService byRoomAndPeriodService;
 
@@ -42,29 +41,6 @@ public class ReservationServiceTest {
     private ReservationGetAllByFilterService getAllByFilterService;
 
     @Test
-    public void saveReservation() {
-        Reservation reservation = Reservation.builder()
-                .room(Room.builder()
-                        .number("1103")
-                        .sitsCount(22)
-                        .build())
-                .employee(Employee.builder()
-                        .firstName("Ivan")
-                        .lastName("Ivanov")
-                        .build())
-                .reservedFrom(Timestamp.valueOf(LocalDateTime.parse("2018-04-04T12:52", DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
-                .reservedTo(Timestamp.valueOf(LocalDateTime.parse("2018-04-04T13:50", DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
-                .reason("Dance")
-                .build();
-
-        reservationSaveService.save(reservation);
-
-        assertNotNull(reservation.getId());
-        assertNotNull(reservation.getRoom().getId());
-        assertNotNull(reservation.getEmployee().getId());
-    }
-
-    @Test
     public void getCountReservationInPeriod() {
         Room room = Room.builder()
                 .number("1111")
@@ -76,8 +52,8 @@ public class ReservationServiceTest {
                         .firstName("Ivan")
                         .lastName("Ivanov")
                         .build())
-                .reservedFrom(Timestamp.valueOf(LocalDateTime.parse("2018-04-04T12:52", DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
-                .reservedTo(Timestamp.valueOf(LocalDateTime.parse("2018-04-04T13:50", DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                .reservedFrom(valueOf(parse("2018-04-04T12:52")))
+                .reservedTo(valueOf(parse("2018-04-04T13:50")))
                 .reason("Dance")
                 .build();
         reservationSaveService.save(reservation1);
@@ -87,15 +63,15 @@ public class ReservationServiceTest {
                         .firstName("Ivan1")
                         .lastName("Ivanov1")
                         .build())
-                .reservedFrom(Timestamp.valueOf(LocalDateTime.parse("2018-04-04T11:52", DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
-                .reservedTo(Timestamp.valueOf(LocalDateTime.parse("2018-05-04T14:50", DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                .reservedFrom(valueOf(parse("2018-04-04T11:52")))
+                .reservedTo(valueOf(parse("2018-05-04T14:50")))
                 .reason("Dance1")
                 .build();
         reservationSaveService.save(reservation2);
 
         int aLong = byRoomAndPeriodService.execute(room.getId(),
-                Timestamp.valueOf(LocalDateTime.parse("2018-04-04T12:55", DateTimeFormatter.ISO_LOCAL_DATE_TIME)),
-                Timestamp.valueOf(LocalDateTime.parse("2018-04-04T13:31", DateTimeFormatter.ISO_LOCAL_DATE_TIME)));
+                valueOf(parse("2018-04-04T12:55")),
+                valueOf(parse("2018-04-04T13:31")));
 
         System.out.println(aLong);
         assertEquals(2, aLong);
@@ -114,8 +90,8 @@ public class ReservationServiceTest {
                         .number("12")
                         .build())
                 .employee(employee)
-                .reservedFrom(Timestamp.valueOf(LocalDateTime.parse("2018-04-04T12:52", DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
-                .reservedTo(Timestamp.valueOf(LocalDateTime.parse("2018-04-04T13:50", DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                .reservedFrom(valueOf(parse("2018-04-04T12:52")))
+                .reservedTo(valueOf(parse("2018-04-04T13:50")))
                 .reason("Dance")
                 .build();
         reservationSaveService.save(reservation1);
@@ -125,8 +101,8 @@ public class ReservationServiceTest {
                         .number("13")
                         .build())
                 .employee(employee)
-                .reservedFrom(Timestamp.valueOf(LocalDateTime.parse("2018-04-04T11:52", DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
-                .reservedTo(Timestamp.valueOf(LocalDateTime.parse("2018-05-04T14:50", DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                .reservedFrom(valueOf(parse("2018-04-04T11:52")))
+                .reservedTo(valueOf(parse("2018-05-04T14:50")))
                 .reason("Dance Too")
                 .build();
         reservationSaveService.save(reservation2);
@@ -151,8 +127,8 @@ public class ReservationServiceTest {
                         .number("12")
                         .build())
                 .employee(employee)
-                .reservedFrom(Timestamp.valueOf(LocalDateTime.parse("2018-05-03T12:52")))
-                .reservedTo(Timestamp.valueOf(LocalDateTime.parse("2018-05-03T13:50")))
+                .reservedFrom(valueOf(parse("2018-05-03T12:52")))
+                .reservedTo(valueOf(parse("2018-05-03T13:50")))
                 .reason("Dance")
                 .build();
         reservationSaveService.save(reservation1);
@@ -162,8 +138,8 @@ public class ReservationServiceTest {
                         .number("13")
                         .build())
                 .employee(employee)
-                .reservedFrom(Timestamp.valueOf(LocalDateTime.parse("2018-04-04T11:52")))
-                .reservedTo(Timestamp.valueOf(LocalDateTime.parse("2018-04-04T14:50")))
+                .reservedFrom(valueOf(parse("2018-04-04T11:52")))
+                .reservedTo(valueOf(parse("2018-04-04T14:50")))
                 .reason("Dance Too")
                 .build();
         reservationSaveService.save(reservation2);
@@ -173,8 +149,8 @@ public class ReservationServiceTest {
                         .number("15")
                         .build())
                 .employee(employee)
-                .reservedFrom(Timestamp.valueOf(LocalDateTime.parse("2018-06-04T11:52")))
-                .reservedTo(Timestamp.valueOf(LocalDateTime.parse("2018-06-04T14:50")))
+                .reservedFrom(valueOf(parse("2018-06-04T11:52")))
+                .reservedTo(valueOf(parse("2018-06-04T14:50")))
                 .reason("Dance Too")
                 .build();
         reservationSaveService.save(reservation3);
@@ -204,8 +180,8 @@ public class ReservationServiceTest {
                         .number("12")
                         .build())
                 .employee(employee)
-                .reservedFrom(Timestamp.valueOf(LocalDateTime.parse("2018-05-03T12:52", DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
-                .reservedTo(Timestamp.valueOf(LocalDateTime.parse("2018-05-03T13:50", DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                .reservedFrom(valueOf(parse("2018-05-03T12:52")))
+                .reservedTo(valueOf(parse("2018-05-03T13:50")))
                 .reason("Dance")
                 .build();
         reservationSaveService.save(reservation1);
@@ -215,8 +191,8 @@ public class ReservationServiceTest {
                         .number("13")
                         .build())
                 .employee(employee)
-                .reservedFrom(Timestamp.valueOf(LocalDateTime.parse("2018-04-04T11:52", DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
-                .reservedTo(Timestamp.valueOf(LocalDateTime.parse("2018-04-04T14:50", DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                .reservedFrom(valueOf(parse("2018-04-04T11:52")))
+                .reservedTo(valueOf(parse("2018-04-04T14:50")))
                 .reason("Dance Too")
                 .build();
         reservationSaveService.save(reservation2);
@@ -226,8 +202,8 @@ public class ReservationServiceTest {
                         .number("15")
                         .build())
                 .employee(employee)
-                .reservedFrom(Timestamp.valueOf(LocalDateTime.parse("2018-06-04T11:52", DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
-                .reservedTo(Timestamp.valueOf(LocalDateTime.parse("2018-06-04T14:50", DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                .reservedFrom(valueOf(parse("2018-06-04T11:52")))
+                .reservedTo(valueOf(parse("2018-06-04T14:50")))
                 .reason("Dance Too")
                 .build();
         reservationSaveService.save(reservation3);

@@ -12,7 +12,7 @@ import static org.junit.Assert.assertNotNull;
 
 @UnitTestConfiguration
 @RunWith(SpringRunner.class)
-public class RoomServicesTests {
+public class RoomGetServiceTests {
     @Autowired
     private RoomSaveService roomSaveService;
 
@@ -26,17 +26,7 @@ public class RoomServicesTests {
     private RoomGetAllService roomGetAllService;
 
     @Test
-    public void saveRoom() {
-        Room room = Room.builder()
-                .number("123a")
-                .sitsCount(24)
-                .build();
-        roomSaveService.save(room);
-        assertNotNull(room.getId());
-    }
-
-    @Test
-    public void RoomGetByNumber() {
+    public void getRoomByNumber() {
         Room room = Room.builder()
                 .number("123a")
                 .sitsCount(22)
@@ -58,7 +48,7 @@ public class RoomServicesTests {
     }
 
     @Test
-    public void RoomGetAll() {
+    public void getAllRoom() {
         Room room1 = Room.builder()
                 .number("123a")
                 .sitsCount(22)
