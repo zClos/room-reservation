@@ -41,6 +41,8 @@ public class RoomController {
     @GetMapping
     public ResponseEntity<Set<Room>> findAllRooms() {
         Set<Room> rooms = getAllService.findAll();
-        return new ResponseEntity<>(rooms, HttpStatus.OK);
+        return (rooms.isEmpty()) ?
+                new ResponseEntity<>(HttpStatus.NO_CONTENT) :
+                new ResponseEntity<>(rooms, HttpStatus.OK);
     }
 }

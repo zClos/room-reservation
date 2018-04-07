@@ -89,7 +89,9 @@ public class EmployeeController {
                 .order(order.orElse(null))
                 .build();
         List<Reservation> list = getAllByFilterService.findAllByFilter(filters);
-        return new ResponseEntity(reservationToJsonListMapping.toJson(list), HttpStatus.OK);
+        return (list.isEmpty()) ?
+                new ResponseEntity<>(HttpStatus.NO_CONTENT) :
+                new ResponseEntity(reservationToJsonListMapping.toJson(list), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -101,6 +103,8 @@ public class EmployeeController {
     @GetMapping
     public ResponseEntity<Set<Employee>> findAllRooms() {
         Set<Employee> employees = getAllService.findAll();
-        return new ResponseEntity<>(employees, HttpStatus.OK);
+        return (employees.isEmpty()) ?
+                new ResponseEntity<>(HttpStatus.NO_CONTENT) :
+                new ResponseEntity<>(employees, HttpStatus.OK);
     }
 }
