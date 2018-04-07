@@ -65,15 +65,15 @@ use of HTTP verbs.
 Save new room in the system
 
 .Request
-include::{snippets}/room-save/http-request.adoc[]
+include::{snippets}/save-room/http-request.adoc[]
 
 .Success response
-include::{snippets}/room-save/http-response.adoc[]
+include::{snippets}/save-room/http-response.adoc[]
 
 .Exception responses
-include::{snippets}/room-save-with-not-unique-number/http-response.adoc[]
-include::{snippets}/room-save-with-empty-number/http-response.adoc[]
-include::{snippets}/room-save-with-grater-size-number/http-response.adoc[]
+include::{snippets}/save-room-with-not-unique-number/http-response.adoc[]
+include::{snippets}/save-room-with-empty-number/http-response.adoc[]
+include::{snippets}/save-room-with-grater-size-number/http-response.adoc[]
 
 [get-all-rooms]
 == Get all rooms
@@ -81,10 +81,10 @@ include::{snippets}/room-save-with-grater-size-number/http-response.adoc[]
 Get all rooms saved in the system by id
 
 .Request
-include::{snippets}/room-get-all/http-request.adoc[]
+include::{snippets}/get-all-room/http-request.adoc[]
 
 .Success response
-include::{snippets}/room-get-all/http-response.adoc[]
+include::{snippets}/get-all-room/http-response.adoc[]
 
 [employee-creation]
 == Employee creation

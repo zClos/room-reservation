@@ -10,6 +10,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+import static java.time.LocalDateTime.now;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
@@ -37,5 +41,26 @@ public abstract class ControllerTestContext {
                 .apply(documentationConfiguration(documentationDestination))
                 .alwaysDo(documentHandler)
                 .build();
+    }
+
+    protected LocalDateTime getTestLocalDateTime() {
+        return Optional.of(now()).map(now -> {
+            if (now.plusHours(2).getHour() > 18 ||
+                    now.getHour() < 9 ||
+                    now.getDayOfMonth() < now.plusHours(2).getDayOfMonth()) {
+                if (now.getDayOfWeek().getValue() == 5 ||
+                        now.getDayOfWeek().getValue() == 6 ||
+                        now.getDayOfWeek().getValue() == 7) {
+                    return LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth() + 3,
+                            12, 0);
+                }
+                return LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth() + 1,
+                        12, 0);
+            } else if (now.getDayOfWeek().getValue() == 6 || now.getDayOfWeek().getValue() == 7) {
+                return LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth() + 3,
+                        12, 0);
+            }
+            return now.minusSeconds(now.getSecond()).minusNanos(now.getNano());
+        }).orElse(null);
     }
 }
