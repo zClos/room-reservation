@@ -187,4 +187,7 @@ include::{snippets}/get-all-employee-room-reservations-by-period-and-order-by-de
 .Success response
 include::{snippets}/get-all-employee-room-reservations-by-period-and-order-by-desc/http-response.adoc[]
 
+.Exception response
+include::{snippets}/get-all-employee-room-reservations-invalid-date/http-response.adoc[]
+
 Test task:: REST API service for PLAYGENDARY =)

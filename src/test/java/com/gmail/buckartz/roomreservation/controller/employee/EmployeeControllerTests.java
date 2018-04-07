@@ -60,10 +60,13 @@ public class EmployeeControllerTests extends ControllerTestContext {
                         now.getDayOfWeek().getValue() == 6 ||
                         now.getDayOfWeek().getValue() == 7) {
                     return LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth() + 3,
-                            12, 00);
+                            12, 0);
                 }
                 return LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth() + 1,
-                        12, 00);
+                        12, 0);
+            } else if (now.getDayOfWeek().getValue() == 6 || now.getDayOfWeek().getValue() == 7) {
+                return LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth() + 3,
+                        12, 0);
             }
             return now.minusSeconds(now.getSecond()).minusNanos(now.getNano());
         }).orElse(null);
@@ -613,5 +616,31 @@ public class EmployeeControllerTests extends ControllerTestContext {
                                         fieldWithPath("[].id").description(""),
                                         fieldWithPath("[].firstName").description(""),
                                         fieldWithPath("[].lastName").description(""))));
+    }
+
+    @Test
+    public void getAllEmployeeRoomReservationsInvalidDate() throws Exception {
+        Employee employee = Employee.builder()
+                .firstName("Alen")
+                .lastName("Delon")
+                .build();
+        employeeSaveService.save(employee);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Accept-Charset", "utf-8");
+
+        getMockMvc().perform(get("/employee/{id}/reservation", employee.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(headers)
+                .param("from", "2018-04-04{T}12:00")
+                .param("to", "2018-15-04T12:00")
+                .param("order", "DESC"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.commonViolations[*]",
+                        containsInAnyOrder(
+                                "Invalid format for 2018-15-04T12:00, follow the ISO template - YYYY-MM-DD{T}HH:MM but drop braces",
+                                "Invalid format for 2018-04-04{T}12:00, follow the ISO template - YYYY-MM-DD{T}HH:MM but drop braces"
+                        )));
     }
 }
