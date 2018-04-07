@@ -15,6 +15,7 @@ import com.gmail.buckartz.roomreservation.service.reservation.ReservationGetAllB
 import com.gmail.buckartz.roomreservation.service.reservation.ReservationSaveService;
 import com.gmail.buckartz.roomreservation.service.reservation.filter.ReservationSearchFilters;
 import com.gmail.buckartz.roomreservation.validation.employee.EmployeeIdExistenceConstraint;
+import com.gmail.buckartz.roomreservation.validation.reservations.DateFormatConstraint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -78,8 +79,8 @@ public class EmployeeController {
 
     @GetMapping("/{id}/reservation")
     public ResponseEntity<List<Reservation>> getAllEmployeeRoomReservations(@EmployeeIdExistenceConstraint @PathVariable("id") Long id,
-                                                                            @RequestParam("from") Optional<String> from,
-                                                                            @RequestParam("to") Optional<String> to,
+                                                                            @DateFormatConstraint(required = false) @RequestParam("from") Optional<String> from,
+                                                                            @DateFormatConstraint(required = false) @RequestParam("to") Optional<String> to,
                                                                             @RequestParam("order") Optional<String> order) {
         ReservationSearchFilters filters = ReservationSearchFilters.builder()
                 .id(id)
