@@ -1,0 +1,33 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="1" author="Alexander Alkhimyonok" dbms="postgresql">
+        <createIndex tableName="reservation" indexName="employee_id_index" unique="false">
+            <column name="employee_id" valueNumeric="true"/>
+        </createIndex>
+        <dropIndex tableName="reservation" indexName="employee_id_index"/>
+    </changeSet>
+
+    <changeSet id="2" author="Alexander Alkhimyonok" dbms="postgresql">
+        <createIndex tableName="reservation" indexName="room_id_index" unique="false">
+            <column name="room_id" valueNumeric="true"/>
+        </createIndex>
+        <dropIndex tableName="reservation" indexName="room_id_index"/>
+    </changeSet>
+
+    <changeSet id="3" author="Alexander Alkhimyonok" dbms="postgresql">
+        <createIndex tableName="reservation" indexName="reserved_from_index" unique="false">
+            <column name="reserved_from" defaultValueDate="true"/>
+        </createIndex>
+        <dropIndex tableName="reservation" indexName="reserved_from_index"/>
+    </changeSet>
+
+    <changeSet id="4" author="Alexander Alkhimyonok" dbms="postgresql">
+        <createIndex tableName="reservation" indexName="reserved_to_index" unique="false">
+            <column name="reserved_to" defaultValueDate="true"/>
+        </createIndex>
+        <dropIndex tableName="reservation" indexName="reserved_to_index"/>
+    </changeSet>
+</databaseChangeLog>
