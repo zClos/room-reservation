@@ -16,7 +16,7 @@ import java.sql.Timestamp;
 public class Reservation {
 
     @Id
-    @SequenceGenerator(name = "reservation_seq", sequenceName = "reservation_seq", schema = "public")
+    @SequenceGenerator(name = "reservation_seq", sequenceName = "reservation_seq", schema = "public", allocationSize = 0)
     @GeneratedValue(generator = "reservation_seq", strategy = GenerationType.SEQUENCE)
     private Long id;
 

@@ -19,7 +19,7 @@ import java.util.Set;
 @Getter
 public class Room {
     @Id
-    @SequenceGenerator(name = "room_seq", sequenceName = "room_seq", schema = "public")
+    @SequenceGenerator(name = "room_seq", sequenceName = "room_seq", schema = "public", allocationSize = 0)
     @GeneratedValue(generator = "room_seq", strategy = GenerationType.SEQUENCE)
     private Long id;
 

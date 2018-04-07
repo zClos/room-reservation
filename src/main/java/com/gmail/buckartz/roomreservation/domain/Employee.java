@@ -23,7 +23,7 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = "reservations")
 public class Employee {
     @Id
-    @SequenceGenerator(name = "employee_seq", sequenceName = "employee_seq", allocationSize = 1)
+    @SequenceGenerator(name = "employee_seq", sequenceName = "employee_seq", allocationSize = 0)
     @GeneratedValue(generator = "employee_seq", strategy = GenerationType.SEQUENCE)
     private Long id;
 
