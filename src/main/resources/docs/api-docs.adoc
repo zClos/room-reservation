@@ -1,4 +1,4 @@
-= Room reservation REST APi Docs
+= *Room reservation REST API Docs*
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
@@ -10,9 +10,8 @@
 This document describes ways of communication with the _"Room reservation service"_ running at http://localhost:8080:
 
 [[overview-http-verbs]]
-== HTTP verbs
-SFP tries to adhere as closely as possible to standard HTTP and REST conventions in its
-use of HTTP verbs.
+== *HTTP verbs*
+Application adhere as closely as possible to standard HTTP and REST conventions in its use of HTTP verbs.
 |===
 | Verb | Usage
 
@@ -21,19 +20,10 @@ use of HTTP verbs.
 
 | `POST`
 | Used to create a new resource
-
-| `PATCH`
-| Used to update an existing resource, including partial updates
-
-| `PUT`
-| Used to update an existing resource, full updates only
-
-| `DELETE`
-| Used to delete an existing resource
 |===
 
 [http-status-codes]
-== HTTP status codes
+== *HTTP status codes*
 
 [%header]
 |===
@@ -44,7 +34,6 @@ use of HTTP verbs.
   The actual response will depend on the request method used.
 
  - In a GET request, the response will contain an entity corresponding to the requested resource.
- - In a POST request, the response will contain an entity describing or containing the result of the action.
 
 | `201 Created`
 | The request has been fulfilled and resulted in a new resource being created.
@@ -59,45 +48,51 @@ use of HTTP verbs.
 | The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.
 |===
 
-[room-creation]
-== Room creation
+[room]
+== *Room*
+
+[save-new-room]
+=== Save new room
 
 Save new room in the system
 
-.Request
+==== _Request_
 include::{snippets}/save-room/http-request.adoc[]
 
-.Success response
+==== _Success response_
 include::{snippets}/save-room/http-response.adoc[]
 
-.Exception responses
+==== _Exception responses_
 include::{snippets}/save-room-with-not-unique-number/http-response.adoc[]
 include::{snippets}/save-room-with-empty-number/http-response.adoc[]
 include::{snippets}/save-room-with-grater-size-number/http-response.adoc[]
 
-[get-all-rooms]
-== Get all rooms
+[get-list-all-rooms]
+=== Get list of all rooms
 
-Get all rooms saved in the system by id
+Get all rooms saved in the system
 
-.Request
+==== _Request_
 include::{snippets}/get-all-room/http-request.adoc[]
 
-.Success response
+==== _Success response_
 include::{snippets}/get-all-room/http-response.adoc[]
 
-[employee-creation]
-== Employee creation
+[employee]
+== *Employee*
+
+[save-new-employee]
+=== Save new employee
 
 Save new employee in the system
 
-.Request
+==== _Request_
 include::{snippets}/save-employee/http-request.adoc[]
 
-.Success response
+==== _Success response_
 include::{snippets}/save-employee/http-response.adoc[]
 
-.Exception responses
+==== _Exception responses_
 include::{snippets}/save-employee-with-empty-value/http-response.adoc[]
 include::{snippets}/save-employee-with-bad-length-values/http-response.adoc[]
 
@@ -112,44 +107,48 @@ Request has the parameter *id*.
 
 Get one unique employee saved in the system by id
 
-.Request
+==== _Request_
 include::{snippets}/get-employee-by-id/http-request.adoc[]
 
-.Success response
+==== _Success response_
 include::{snippets}/get-employee-by-id/http-response.adoc[]
 
-.Exception responses
+==== _Exception responses_
 include::{snippets}/get-employee-by-id-not-exist/http-response.adoc[]
 
 [get-all-employees]
 === Get all employees
 
-Get all employees saved in the system by id
+Get all employees saved in the system
 
-.Request
+==== _Request_
 include::{snippets}/get-employee-all/http-request.adoc[]
 
-.Success response
+==== _Success response_
 include::{snippets}/get-employee-all/http-response.adoc[]
 
-[employee-creation]
-== Room reservation creation
+[room-reservation]
+== *Room reservation*
+
+[New-room-reservation]
+=== New room reservation
 
 Save new room reservation by user's id
 
 Request has the parameter *id*. It's mean that employee will be owner of this reservation.
 None will be able to reserve room with an identifier in the request's body during that time.
+
 ``
 /employee/{id}/reservation
 ``
 
-.Request
+==== _Request_
 include::{snippets}/save-employee-room-reservation/http-request.adoc[]
 
-.Success response
+==== _Success response_
 include::{snippets}/save-employee-room-reservation/http-response.adoc[]
 
-.Exception responses
+==== _Exception responses_
 include::{snippets}/save-employee-room-reservation-for-not-exist-employee/http-response.adoc[]
 include::{snippets}/save-employee-room-reservation-for-not-exist-room/http-response.adoc[]
 include::{snippets}/save-employee-room-reservation-empty-values/http-response.adoc[]
@@ -157,22 +156,28 @@ include::{snippets}/save-employee-room-reservation-correct-values-group/http-res
 include::{snippets}/save-employee-room-reservation-out-of-work-time/http-response.adoc[]
 include::{snippets}/save-employee-room-reservation-in-exist-period/http-response.adoc[]
 
-== Getting all room reservations of employee
+[getting-all-reserved-rooms-by-employee]
+=== Getting all reserved rooms by employee
+
+Request has the parameter *id*. ID describes employee whose reservations are interested
 
 ``
 /employee/{id}/reservation
 ``
 
-.Request
+==== _Request_
 include::{snippets}/get-all-employee-room-reservations/http-request.adoc[]
 
-.Success response
+==== _Success response_
 include::{snippets}/get-all-employee-room-reservations/http-response.adoc[]
 
-.Exception responses
+==== _Exception responses_
 include::{snippets}/get-all-employee-room-reservations-not-exists-employee/http-response.adoc[]
 
-== Getting list of reserved rooms by employee for period
+[getting-list-of-reserved-rooms-by-employee-for-period]
+=== Getting list of reserved rooms by employee for period
+
+As it was said the identifier describes the employee.
 
 ``
 /employee/{id}/reservation?from={reservedFrom}&to={reservedTo}&order={order}
@@ -192,13 +197,14 @@ The parameters are optional. _Missing of the parameters_
  * _{reservedTo}_ - missed so will be shown reservations up to this date
  * _{order}_ - missed so will be shown list sorted by default by id
 
-.Request
+==== _Request_
 include::{snippets}/get-all-employee-room-reservations-by-period-and-order-by-desc/http-request.adoc[]
 
-.Success response
+==== _Success response_
 include::{snippets}/get-all-employee-room-reservations-by-period-and-order-by-desc/http-response.adoc[]
 
-.Exception response
+==== _Exception response_
 include::{snippets}/get-all-employee-room-reservations-invalid-date/http-response.adoc[]
+
 
 Test task:: REST API service for PLAYGENDARY =)
