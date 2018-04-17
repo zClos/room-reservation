@@ -1,7 +1,7 @@
 package com.gmail.buckartz.roomreservation.service.employee;
 
 import com.gmail.buckartz.roomreservation.config.UnitTestConfiguration;
-import com.gmail.buckartz.roomreservation.domain.Employee;
+import com.gmail.buckartz.roomreservation.domain.employee.Employee;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,18 +1,12 @@
-package com.gmail.buckartz.roomreservation.domain;
+package com.gmail.buckartz.roomreservation.domain.employee;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.gmail.buckartz.roomreservation.domain.Reservation;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,7 +14,7 @@ import java.util.Set;
 @Table(name = "employee")
 @Getter
 @Setter
-@EqualsAndHashCode(exclude = "reservations")
+@EqualsAndHashCode(exclude = {"reservations", "authority"})
 public class Employee {
     @Id
     @SequenceGenerator(name = "employee_seq", sequenceName = "employee_seq", allocationSize = 0)
@@ -36,6 +30,10 @@ public class Employee {
     @OneToMany(mappedBy = "employee")
     @JsonBackReference
     private Set<Reservation> reservations = new HashSet<>();
+
+    @OneToOne(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonBackReference
+    private Authority authority;
 
     public static EmployeeBuilder builder() {
         return new EmployeeBuilder();
@@ -54,6 +52,12 @@ public class Employee {
 
         public EmployeeBuilder lastName(String lastName) {
             employee.setLastName(lastName);
+            return this;
+        }
+
+        public EmployeeBuilder authority(Authority authority) {
+            employee.setAuthority(authority);
+            authority.setEmployee(employee);
             return this;
         }
 

@@ -1,7 +1,7 @@
 package com.gmail.buckartz.roomreservation.service.employee.impl;
 
-import com.gmail.buckartz.roomreservation.dao.EmployeeRepository;
-import com.gmail.buckartz.roomreservation.domain.Employee;
+import com.gmail.buckartz.roomreservation.dao.employee.EmployeeRepository;
+import com.gmail.buckartz.roomreservation.domain.employee.Employee;
 import com.gmail.buckartz.roomreservation.service.employee.EmployeeService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

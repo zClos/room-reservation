@@ -2,7 +2,7 @@ package com.gmail.buckartz.roomreservation.controller.employee;
 
 import com.gmail.buckartz.roomreservation.config.ControllerTestContext;
 import com.gmail.buckartz.roomreservation.config.IntegrationWebTestConfiguration;
-import com.gmail.buckartz.roomreservation.domain.Employee;
+import com.gmail.buckartz.roomreservation.domain.employee.Employee;
 import com.gmail.buckartz.roomreservation.service.employee.EmployeeService;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,6 +1,7 @@
 package com.gmail.buckartz.roomreservation.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.gmail.buckartz.roomreservation.domain.employee.Employee;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;

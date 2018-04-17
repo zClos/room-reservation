@@ -1,6 +1,6 @@
 package com.gmail.buckartz.roomreservation.mapping.employee.impl;
 
-import com.gmail.buckartz.roomreservation.domain.Employee;
+import com.gmail.buckartz.roomreservation.domain.employee.Employee;
 import com.gmail.buckartz.roomreservation.mapping.employee.EmployeeDeserializeMapping;
 import com.gmail.buckartz.roomreservation.mapping.employee.mapper.EmployeeMapper;
 import org.springframework.stereotype.Service;

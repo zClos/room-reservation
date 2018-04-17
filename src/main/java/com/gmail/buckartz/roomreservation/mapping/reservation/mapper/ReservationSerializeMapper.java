@@ -1,7 +1,7 @@
 package com.gmail.buckartz.roomreservation.mapping.reservation.mapper;
 
-import com.gmail.buckartz.roomreservation.domain.Employee;
 import com.gmail.buckartz.roomreservation.domain.Room;
+import com.gmail.buckartz.roomreservation.domain.employee.Employee;
 import lombok.Getter;
 import lombok.Setter;
 

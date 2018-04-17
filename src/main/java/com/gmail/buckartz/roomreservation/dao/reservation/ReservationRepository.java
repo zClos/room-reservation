@@ -1,4 +1,4 @@
-package com.gmail.buckartz.roomreservation.dao;
+package com.gmail.buckartz.roomreservation.dao.reservation;
 
 import com.gmail.buckartz.roomreservation.domain.Reservation;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

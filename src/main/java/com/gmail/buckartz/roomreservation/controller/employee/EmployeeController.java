@@ -1,7 +1,7 @@
 package com.gmail.buckartz.roomreservation.controller.employee;
 
 import com.gmail.buckartz.roomreservation.controller.DefaultHeaderValues;
-import com.gmail.buckartz.roomreservation.domain.Employee;
+import com.gmail.buckartz.roomreservation.domain.employee.Employee;
 import com.gmail.buckartz.roomreservation.mapping.content_page.PageSerializeMapping;
 import com.gmail.buckartz.roomreservation.mapping.content_page.mapper.PageSerializeMapper;
 import com.gmail.buckartz.roomreservation.mapping.employee.EmployeeDeserializeMapping;

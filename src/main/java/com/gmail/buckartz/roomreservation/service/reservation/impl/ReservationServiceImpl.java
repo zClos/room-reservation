@@ -1,6 +1,6 @@
 package com.gmail.buckartz.roomreservation.service.reservation.impl;
 
-import com.gmail.buckartz.roomreservation.dao.ReservationRepository;
+import com.gmail.buckartz.roomreservation.dao.reservation.ReservationRepository;
 import com.gmail.buckartz.roomreservation.domain.Reservation;
 import com.gmail.buckartz.roomreservation.service.reservation.ReservationService;
 import com.gmail.buckartz.roomreservation.service.reservation.filter.ReservationSearchFilters;

@@ -1,6 +1,6 @@
 package com.gmail.buckartz.roomreservation.service.room.impl;
 
-import com.gmail.buckartz.roomreservation.dao.RoomRepository;
+import com.gmail.buckartz.roomreservation.dao.room.RoomRepository;
 import com.gmail.buckartz.roomreservation.domain.Room;
 import com.gmail.buckartz.roomreservation.service.room.RoomService;
 import org.springframework.data.domain.Page;

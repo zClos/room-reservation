@@ -1,4 +1,4 @@
-package com.gmail.buckartz.roomreservation.dao;
+package com.gmail.buckartz.roomreservation.dao.room;
 
 import com.gmail.buckartz.roomreservation.domain.Room;
 import org.springframework.data.repository.CrudRepository;

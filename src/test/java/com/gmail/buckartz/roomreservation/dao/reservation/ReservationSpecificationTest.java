@@ -1,11 +1,10 @@
 package com.gmail.buckartz.roomreservation.dao.reservation;
 
 import com.gmail.buckartz.roomreservation.config.UnitTestConfiguration;
-import com.gmail.buckartz.roomreservation.dao.ReservationRepository;
-import com.gmail.buckartz.roomreservation.dao.RoomRepository;
-import com.gmail.buckartz.roomreservation.domain.Employee;
+import com.gmail.buckartz.roomreservation.dao.room.RoomRepository;
 import com.gmail.buckartz.roomreservation.domain.Reservation;
 import com.gmail.buckartz.roomreservation.domain.Room;
+import com.gmail.buckartz.roomreservation.domain.employee.Employee;
 import com.gmail.buckartz.roomreservation.service.employee.EmployeeService;
 import org.junit.Assert;
 import org.junit.Test;
