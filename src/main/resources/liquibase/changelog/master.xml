@@ -7,4 +7,5 @@
     <include file="classpath:liquibase/changelog/release_1.0/1.2_Employee_schema_creation.xml"/>
     <include file="classpath:liquibase/changelog/release_1.0/1.3_Reservation_schema_creation.xml"/>
     <include file="classpath:liquibase/changelog/release_1.0/1.4_Indexes_creating_for_reservation_table.xml"/>
+    <include file="classpath:liquibase/changelog/release_2.0/2.0_Authority_table_creation.xml"/>
 </databaseChangeLog>
