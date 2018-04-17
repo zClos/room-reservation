@@ -19,7 +19,7 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(SpringRunner.class)
 public class ReservationSaveServiceTests {
     @Autowired
-    private ReservationSaveService reservationSaveService;
+    private ReservationService reservationService;
 
     @Test
     public void saveReservation() {
@@ -37,7 +37,7 @@ public class ReservationSaveServiceTests {
                 .reason("Dance")
                 .build();
 
-        reservationSaveService.save(reservation);
+        reservationService.save(reservation);
 
         assertNotNull(reservation.getId());
         assertNotNull(reservation.getRoom().getId());

@@ -72,11 +72,25 @@ include::{snippets}/save-room-with-grater-size-number/http-response.adoc[]
 
 Get all rooms saved in the system
 
+``
+/room?page={page}&size={size}
+``
+
+Request parameters show page & size of load data.
+
+ * _{page}_ - parameter shows number of interested page
+ * _{size}_ - parameter shows number of loading elements
+
+ The parameters are optional. Default value for page is 1 and for size is 15.
+
 ==== _Request_
-include::{snippets}/get-all-room/http-request.adoc[]
+include::{snippets}/get-all-room-default/http-request.adoc[]
 
 ==== _Success response_
-include::{snippets}/get-all-room/http-response.adoc[]
+include::{snippets}/get-all-room-default/http-response.adoc[]
+
+==== _Success response for concrete page and size_
+include::{snippets}/get-all-room-paging/http-response.adoc[]
 
 [employee]
 == *Employee*
@@ -121,11 +135,25 @@ include::{snippets}/get-employee-by-id-not-exist/http-response.adoc[]
 
 Get all employees saved in the system
 
+``
+/employee?page={page}&size={size}
+``
+
+Request parameters show page & size of load data.
+
+ * _{page}_ - parameter shows number of interested page
+ * _{size}_ - parameter shows number of loading elements
+
+ The parameters are optional. Default value for page is 1 and for size is 15.
+
 ==== _Request_
-include::{snippets}/get-employee-all/http-request.adoc[]
+include::{snippets}/get-all-employee-default/http-request.adoc[]
 
 ==== _Success response_
-include::{snippets}/get-employee-all/http-response.adoc[]
+include::{snippets}/get-all-employee-default/http-response.adoc[]
+
+==== _Success response for concrete page and size_
+include::{snippets}/get-all-employee-paging/http-response.adoc[]
 
 [room-reservation]
 == *Room reservation*

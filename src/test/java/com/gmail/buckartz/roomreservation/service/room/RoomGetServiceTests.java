@@ -9,21 +9,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 @UnitTestConfiguration
 @RunWith(SpringRunner.class)
 public class RoomGetServiceTests {
     @Autowired
-    private RoomSaveService roomSaveService;
-
-    @Autowired
-    private RoomGetByNumberService getByNumberService;
-
-    @Autowired
-    private RoomGetByIdService roomGetByIdService;
-
-    @Autowired
-    private RoomGetAllService roomGetAllService;
+    private RoomService roomService;
 
     @Test
     public void getRoomByNumber() {
@@ -31,9 +23,9 @@ public class RoomGetServiceTests {
                 .number("123a")
                 .sitsCount(22)
                 .build();
-        roomSaveService.save(room);
+        roomService.save(room);
 
-        assertNotNull(getByNumberService.findByNumber(room.getNumber()));
+        assertNotNull(roomService.findByNumber(room.getNumber()));
     }
 
     @Test
@@ -42,9 +34,9 @@ public class RoomGetServiceTests {
                 .number("123b")
                 .sitsCount(6)
                 .build();
-        roomSaveService.save(room);
+        roomService.save(room);
 
-        assertEquals(room, roomGetByIdService.findById(room.getId()));
+        assertTrue(roomService.exists(room.getId()));
     }
 
     @Test
@@ -61,10 +53,10 @@ public class RoomGetServiceTests {
                 .number("123c")
                 .sitsCount(20)
                 .build();
-        roomSaveService.save(room1);
-        roomSaveService.save(room2);
-        roomSaveService.save(room3);
+        roomService.save(room1);
+        roomService.save(room2);
+        roomService.save(room3);
 
-        assertEquals(3, roomGetAllService.findAll().size());
+        assertEquals(3, roomService.findAll(0, 15).getContent().size());
     }
 }

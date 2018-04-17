@@ -3,9 +3,9 @@ package com.gmail.buckartz.roomreservation.controller.room;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gmail.buckartz.roomreservation.config.ControllerTestContext;
 import com.gmail.buckartz.roomreservation.config.IntegrationWebTestConfiguration;
-import com.gmail.buckartz.roomreservation.mapping.room.RoomMapping;
-import com.gmail.buckartz.roomreservation.mapping.room.mapper.RoomMapper;
-import com.gmail.buckartz.roomreservation.service.room.RoomSaveService;
+import com.gmail.buckartz.roomreservation.mapping.room.RoomDeserializeMapping;
+import com.gmail.buckartz.roomreservation.mapping.room.mapper.RoomDeserializeMapper;
+import com.gmail.buckartz.roomreservation.service.room.RoomService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +27,14 @@ public class RoomSaveControllerTests extends ControllerTestContext {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private RoomSaveService roomSaveService;
+    private RoomService roomService;
 
     @Autowired
-    private RoomMapping roomMapping;
+    private RoomDeserializeMapping roomMapping;
 
     @Test
     public void saveRoom() throws Exception {
-        RoomMapper roomMapper = RoomMapper.builder()
+        RoomDeserializeMapper roomDeserializeMapper = RoomDeserializeMapper.builder()
                 .number("1408")
                 .sitsCount(2)
                 .build();
@@ -46,7 +46,7 @@ public class RoomSaveControllerTests extends ControllerTestContext {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .headers(headers)
-                .content(objectMapper.writeValueAsString(roomMapper)))
+                .content(objectMapper.writeValueAsString(roomDeserializeMapper)))
                 .andExpect(status().isCreated())
                 .andDo(getDocumentHandler()
                         .document(
@@ -58,11 +58,11 @@ public class RoomSaveControllerTests extends ControllerTestContext {
 
     @Test
     public void saveRoomWithNotUniqueNumber() throws Exception {
-        RoomMapper roomMapper = RoomMapper.builder()
+        RoomDeserializeMapper roomDeserializeMapper = RoomDeserializeMapper.builder()
                 .number("1408")
                 .sitsCount(2)
                 .build();
-        roomSaveService.save(roomMapping.toObject(roomMapper));
+        roomService.save(roomMapping.toObject(roomDeserializeMapper));
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Accept-Charset", "utf-8");
@@ -71,7 +71,7 @@ public class RoomSaveControllerTests extends ControllerTestContext {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .headers(headers)
-                .content(objectMapper.writeValueAsString(roomMapper)))
+                .content(objectMapper.writeValueAsString(roomDeserializeMapper)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.fieldsViolations.number",
                         containsInAnyOrder("Room with such number has already existed")));
@@ -79,7 +79,7 @@ public class RoomSaveControllerTests extends ControllerTestContext {
 
     @Test
     public void saveRoomWithEmptyNumber() throws Exception {
-        RoomMapper roomMapper = RoomMapper.builder()
+        RoomDeserializeMapper roomDeserializeMapper = RoomDeserializeMapper.builder()
                 .sitsCount(2)
                 .build();
 
@@ -90,7 +90,7 @@ public class RoomSaveControllerTests extends ControllerTestContext {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .headers(headers)
-                .content(objectMapper.writeValueAsString(roomMapper)))
+                .content(objectMapper.writeValueAsString(roomDeserializeMapper)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.fieldsViolations.number",
                         containsInAnyOrder("Room number must not be empty")));
@@ -98,7 +98,7 @@ public class RoomSaveControllerTests extends ControllerTestContext {
 
     @Test
     public void saveRoomWithGraterSizeNumber() throws Exception {
-        RoomMapper roomMapper = RoomMapper.builder()
+        RoomDeserializeMapper roomDeserializeMapper = RoomDeserializeMapper.builder()
                 .number("1408abc")
                 .sitsCount(2)
                 .build();
@@ -110,7 +110,7 @@ public class RoomSaveControllerTests extends ControllerTestContext {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .headers(headers)
-                .content(objectMapper.writeValueAsString(roomMapper)))
+                .content(objectMapper.writeValueAsString(roomDeserializeMapper)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.fieldsViolations.number",
                         containsInAnyOrder("Size of room number must be less than 6 characters")));

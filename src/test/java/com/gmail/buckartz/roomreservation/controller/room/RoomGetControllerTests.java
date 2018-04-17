@@ -2,9 +2,9 @@ package com.gmail.buckartz.roomreservation.controller.room;
 
 import com.gmail.buckartz.roomreservation.config.ControllerTestContext;
 import com.gmail.buckartz.roomreservation.config.IntegrationWebTestConfiguration;
-import com.gmail.buckartz.roomreservation.mapping.room.RoomMapping;
-import com.gmail.buckartz.roomreservation.mapping.room.mapper.RoomMapper;
-import com.gmail.buckartz.roomreservation.service.room.RoomSaveService;
+import com.gmail.buckartz.roomreservation.mapping.room.RoomDeserializeMapping;
+import com.gmail.buckartz.roomreservation.mapping.room.mapper.RoomDeserializeMapper;
+import com.gmail.buckartz.roomreservation.service.room.RoomService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,28 +24,28 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 public class RoomGetControllerTests extends ControllerTestContext {
     @Autowired
-    private RoomSaveService roomSaveService;
+    private RoomService roomService;
 
     @Autowired
-    private RoomMapping roomMapping;
+    private RoomDeserializeMapping roomMapping;
 
     @Test
-    public void getAllRoom() throws Exception {
-        RoomMapper roomMapper1 = RoomMapper.builder()
+    public void getAllRoomDefault() throws Exception {
+        RoomDeserializeMapper roomDeserializeMapper1 = RoomDeserializeMapper.builder()
                 .number("1408abc")
                 .sitsCount(2)
                 .build();
-        RoomMapper roomMapper2 = RoomMapper.builder()
+        RoomDeserializeMapper roomDeserializeMapper2 = RoomDeserializeMapper.builder()
                 .number("1408ac")
                 .sitsCount(2)
                 .build();
-        RoomMapper roomMapper3 = RoomMapper.builder()
+        RoomDeserializeMapper roomDeserializeMapper3 = RoomDeserializeMapper.builder()
                 .number("1408a")
                 .sitsCount(2)
                 .build();
-        roomSaveService.save(roomMapping.toObject(roomMapper1));
-        roomSaveService.save(roomMapping.toObject(roomMapper2));
-        roomSaveService.save(roomMapping.toObject(roomMapper3));
+        roomService.save(roomMapping.toObject(roomDeserializeMapper1));
+        roomService.save(roomMapping.toObject(roomDeserializeMapper2));
+        roomService.save(roomMapping.toObject(roomDeserializeMapper3));
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Accept-Charset", "utf-8");
@@ -55,12 +55,58 @@ public class RoomGetControllerTests extends ControllerTestContext {
                 .contentType(MediaType.APPLICATION_JSON)
                 .headers(headers))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()", is(3)))
+                .andExpect(jsonPath("$.content.length()", is(3)))
                 .andDo(getDocumentHandler()
                         .document(
                                 responseFields(
-                                        fieldWithPath("[].id").description(""),
-                                        fieldWithPath("[].number").description(""),
-                                        fieldWithPath("[].sitsCount").description(""))));
+                                        fieldWithPath(".content[].id").description(""),
+                                        fieldWithPath(".content[].number").description(""),
+                                        fieldWithPath(".content[].sitsCount").description(""),
+                                        fieldWithPath(".totalElements").description(""),
+                                        fieldWithPath(".totalPages").description(""),
+                                        fieldWithPath(".number").description(""),
+                                        fieldWithPath(".size").description(""))));
+    }
+
+    @Test
+    public void getAllRoomPaging() throws Exception {
+        RoomDeserializeMapper roomDeserializeMapper1 = RoomDeserializeMapper.builder()
+                .number("1408abc")
+                .sitsCount(2)
+                .build();
+        RoomDeserializeMapper roomDeserializeMapper2 = RoomDeserializeMapper.builder()
+                .number("1408ac")
+                .sitsCount(2)
+                .build();
+        RoomDeserializeMapper roomDeserializeMapper3 = RoomDeserializeMapper.builder()
+                .number("1408a")
+                .sitsCount(2)
+                .build();
+        roomService.save(roomMapping.toObject(roomDeserializeMapper1));
+        roomService.save(roomMapping.toObject(roomDeserializeMapper2));
+        roomService.save(roomMapping.toObject(roomDeserializeMapper3));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Accept-Charset", "utf-8");
+
+        getMockMvc().perform(get("/room")
+                .param("page", "2")
+                .param("size", "2")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(headers))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalElements", is(3)))
+                .andExpect(jsonPath("$.content.length()", is(1)))
+                .andDo(getDocumentHandler()
+                        .document(
+                                responseFields(
+                                        fieldWithPath(".content[].id").description(""),
+                                        fieldWithPath(".content[].number").description(""),
+                                        fieldWithPath(".content[].sitsCount").description(""),
+                                        fieldWithPath(".totalElements").description(""),
+                                        fieldWithPath(".totalPages").description(""),
+                                        fieldWithPath(".number").description(""),
+                                        fieldWithPath(".size").description(""))));
     }
 }

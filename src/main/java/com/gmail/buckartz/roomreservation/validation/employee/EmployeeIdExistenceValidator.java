@@ -1,6 +1,6 @@
 package com.gmail.buckartz.roomreservation.validation.employee;
 
-import com.gmail.buckartz.roomreservation.service.employee.EmployeeGetByIdService;
+import com.gmail.buckartz.roomreservation.service.employee.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +10,7 @@ import javax.validation.ConstraintValidatorContext;
 @Component
 public class EmployeeIdExistenceValidator implements ConstraintValidator<EmployeeIdExistenceConstraint, Long> {
     @Autowired
-    private EmployeeGetByIdService getByIdService;
+    private EmployeeService employeeService;
 
     @Override
     public void initialize(EmployeeIdExistenceConstraint constraintAnnotation) {
@@ -21,6 +21,6 @@ public class EmployeeIdExistenceValidator implements ConstraintValidator<Employe
         if (value == null) {
             return false;
         }
-        return getByIdService.findById(value) != null;
+        return employeeService.exists(value);
     }
 }

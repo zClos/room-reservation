@@ -3,7 +3,7 @@ package com.gmail.buckartz.roomreservation.controller.employee;
 import com.gmail.buckartz.roomreservation.config.ControllerTestContext;
 import com.gmail.buckartz.roomreservation.config.IntegrationWebTestConfiguration;
 import com.gmail.buckartz.roomreservation.domain.Employee;
-import com.gmail.buckartz.roomreservation.service.employee.EmployeeSaveService;
+import com.gmail.buckartz.roomreservation.service.employee.EmployeeService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 public class EmployeeGetControllerTests extends ControllerTestContext {
     @Autowired
-    private EmployeeSaveService employeeSaveService;
+    private EmployeeService employeeService;
 
     @Test
     public void getEmployeeById() throws Exception {
@@ -31,7 +31,7 @@ public class EmployeeGetControllerTests extends ControllerTestContext {
                 .firstName("Alex")
                 .lastName("Pit")
                 .build();
-        employeeSaveService.save(employee);
+        employeeService.save(employee);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Accept-Charset", "utf-8");
@@ -56,7 +56,7 @@ public class EmployeeGetControllerTests extends ControllerTestContext {
                 .firstName("Ololo")
                 .lastName("Trololo")
                 .build();
-        employeeSaveService.save(employee);
+        employeeService.save(employee);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Accept-Charset", "utf-8");
@@ -71,7 +71,7 @@ public class EmployeeGetControllerTests extends ControllerTestContext {
     }
 
     @Test
-    public void getEmployeeAll() throws Exception {
+    public void getAllEmployeeDefault() throws Exception {
         Employee employee1 = Employee.builder()
                 .firstName("Alex")
                 .lastName("Pit")
@@ -80,8 +80,8 @@ public class EmployeeGetControllerTests extends ControllerTestContext {
                 .firstName("Bred")
                 .lastName("Pit")
                 .build();
-        employeeSaveService.save(employee1);
-        employeeSaveService.save(employee2);
+        employeeService.save(employee1);
+        employeeService.save(employee2);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Accept-Charset", "utf-8");
@@ -91,13 +91,54 @@ public class EmployeeGetControllerTests extends ControllerTestContext {
                 .contentType(MediaType.APPLICATION_JSON)
                 .headers(headers))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()", is(2)))
+                .andExpect(jsonPath("$.totalElements", is(2)))
                 .andDo(getDocumentHandler()
                         .document(
                                 responseFields(
-                                        fieldWithPath("[].id").description(""),
-                                        fieldWithPath("[].firstName").description(""),
-                                        fieldWithPath("[].lastName").description(""))));
+                                        fieldWithPath(".content[].id").description(""),
+                                        fieldWithPath(".content[].firstName").description(""),
+                                        fieldWithPath(".content[].lastName").description(""),
+                                        fieldWithPath(".totalElements").description(""),
+                                        fieldWithPath(".totalPages").description(""),
+                                        fieldWithPath(".number").description(""),
+                                        fieldWithPath(".size").description(""))));
+    }
+
+    @Test
+    public void getAllEmployeePaging() throws Exception {
+        Employee employee1 = Employee.builder()
+                .firstName("Alex")
+                .lastName("Pit")
+                .build();
+        Employee employee2 = Employee.builder()
+                .firstName("Bred")
+                .lastName("Pit")
+                .build();
+        employeeService.save(employee1);
+        employeeService.save(employee2);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Accept-Charset", "utf-8");
+
+        getMockMvc().perform(get("/employee")
+                .param("page", "2")
+                .param("size", "1")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(headers))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalElements", is(2)))
+                .andExpect(jsonPath("$.content.length()", is(1)))
+                .andDo(getDocumentHandler()
+                        .document(
+                                responseFields(
+                                        fieldWithPath(".content[].id").description(""),
+                                        fieldWithPath(".content[].firstName").description(""),
+                                        fieldWithPath(".content[].lastName").description(""),
+                                        fieldWithPath(".totalElements").description(""),
+                                        fieldWithPath(".totalPages").description(""),
+                                        fieldWithPath(".number").description(""),
+                                        fieldWithPath(".size").description(""))));
     }
 
 }

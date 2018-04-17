@@ -5,6 +5,7 @@ import com.gmail.buckartz.roomreservation.domain.Employee;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.assertEquals;
@@ -13,13 +14,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringRunner.class)
 public class EmployeeGetServiceTests {
     @Autowired
-    private EmployeeSaveService employeeSaveService;
-
-    @Autowired
-    private EmployeeGetByIdService employeeGetByIdService;
-
-    @Autowired
-    private EmployeeGetAllService getAllService;
+    private EmployeeService employeeService;
 
     @Test
     public void getEmployeeById() {
@@ -27,13 +22,13 @@ public class EmployeeGetServiceTests {
                 .firstName("Ivan")
                 .lastName("Ivanov")
                 .build();
-        employeeSaveService.save(employee);
+        employeeService.save(employee);
 
-        assertEquals(employee, employeeGetByIdService.findById(employee.getId()));
+        assertEquals(employee, employeeService.findOne(employee.getId()));
     }
 
     @Test
-    public void getEmployeeAll() {
+    public void getAllEmployee() {
         Employee employee1 = Employee.builder()
                 .firstName("Donald")
                 .lastName("Tramp")
@@ -42,9 +37,10 @@ public class EmployeeGetServiceTests {
                 .firstName("Vasya")
                 .lastName("Pupkin")
                 .build();
-        employeeSaveService.save(employee1);
-        employeeSaveService.save(employee2);
+        employeeService.save(employee1);
+        employeeService.save(employee2);
 
-        assertEquals(2, getAllService.findAll().size());
+        Page<Employee> employees = employeeService.findAll(0, 15);
+        assertEquals(2, employees.getContent().size());
     }
 }

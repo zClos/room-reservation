@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RoomUniqueNumber {
-    String message() default "{RoomUniqueNumber.roomMapper.number}";
+    String message() default "{RoomUniqueNumber.roomDeserializeMapper.number}";
 
     Class<?>[] groups() default {};
 

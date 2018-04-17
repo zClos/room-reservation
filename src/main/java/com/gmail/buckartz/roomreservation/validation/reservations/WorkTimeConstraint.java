@@ -12,7 +12,7 @@ import java.time.DayOfWeek;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface WorkTimeConstraint {
-    String message() default "{WorkTimeConstraint.ReservationMapper.date.time}";
+    String message() default "{WorkTimeConstraint.ReservationDeserializeMapper.date.time}";
 
     Class<?>[] groups() default {};
 

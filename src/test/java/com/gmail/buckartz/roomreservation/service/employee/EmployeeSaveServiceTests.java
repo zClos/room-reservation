@@ -13,7 +13,7 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(SpringRunner.class)
 public class EmployeeSaveServiceTests {
     @Autowired
-    private EmployeeSaveService employeeSaveService;
+    private EmployeeService employeeService;
 
     @Test
     public void saveEmployee() {
@@ -22,7 +22,7 @@ public class EmployeeSaveServiceTests {
                 .lastName("Tramp")
                 .build();
 
-        employeeSaveService.save(employee);
+        employeeService.save(employee);
         assertNotNull(employee.getId());
     }
 }
