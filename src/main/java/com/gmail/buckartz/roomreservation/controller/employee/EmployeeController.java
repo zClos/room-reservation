@@ -5,7 +5,7 @@ import com.gmail.buckartz.roomreservation.domain.employee.Employee;
 import com.gmail.buckartz.roomreservation.mapping.content_page.PageSerializeMapping;
 import com.gmail.buckartz.roomreservation.mapping.content_page.mapper.PageSerializeMapper;
 import com.gmail.buckartz.roomreservation.mapping.employee.EmployeeDeserializeMapping;
-import com.gmail.buckartz.roomreservation.mapping.employee.mapper.EmployeeMapper;
+import com.gmail.buckartz.roomreservation.mapping.employee.mapper.EmployeeDeserializeMapper;
 import com.gmail.buckartz.roomreservation.service.employee.EmployeeService;
 import com.gmail.buckartz.roomreservation.validation.employee.EmployeeIdExistenceConstraint;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +39,8 @@ public class EmployeeController {
     private PageSerializeMapping<Employee> pageSerializeMapping;
 
     @PostMapping
-    public ResponseEntity saveEmployee(@Valid @RequestBody EmployeeMapper employeeMapper) {
-        employeeService.save(employeeMapping.toObject(employeeMapper));
+    public ResponseEntity saveEmployee(@Valid @RequestBody EmployeeDeserializeMapper employeeDeserializeMapper) {
+        employeeService.save(employeeMapping.toObject(employeeDeserializeMapper));
         return new ResponseEntity(HttpStatus.CREATED);
     }
 

@@ -109,6 +109,7 @@ include::{snippets}/save-employee/http-response.adoc[]
 ==== _Exception responses_
 include::{snippets}/save-employee-with-empty-value/http-response.adoc[]
 include::{snippets}/save-employee-with-bad-length-values/http-response.adoc[]
+include::{snippets}/save-employee-with-not-unique-login/http-response.adoc[]
 
 [get-employee-by-id]
 === Get employee by id
