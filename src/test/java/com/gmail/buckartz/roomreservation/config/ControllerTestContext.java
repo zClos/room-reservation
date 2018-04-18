@@ -4,13 +4,16 @@ import lombok.Getter;
 import org.junit.Before;
 import org.junit.Rule;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.servlet.Filter;
 import java.time.LocalDateTime;
+import java.util.Base64;
 import java.util.Optional;
 
 import static java.time.LocalDateTime.now;
@@ -27,6 +30,9 @@ public abstract class ControllerTestContext {
     @Autowired
     private WebApplicationContext webContext;
 
+    @Autowired
+    private Filter springSecurityFilterChain;
+
     @Getter
     private MockMvc mockMvc;
 
@@ -39,8 +45,19 @@ public abstract class ControllerTestContext {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(webContext)
                 .apply(documentationConfiguration(documentationDestination))
+                .addFilter(springSecurityFilterChain)
                 .alwaysDo(documentHandler)
                 .build();
+    }
+
+    protected HttpHeaders authHeaders(String login, String password) {
+        String credentials = String.format("%s:%s", login, password);
+        String encodedCredentials = new String(Base64.getEncoder().encode(credentials.getBytes()));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Accept-Charset", "utf-8");
+        headers.add("Authorization", "Basic " + encodedCredentials);
+        return headers;
     }
 
     protected LocalDateTime getTestLocalDateTime() {

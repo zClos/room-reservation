@@ -2,13 +2,16 @@ package com.gmail.buckartz.roomreservation.controller.room;
 
 import com.gmail.buckartz.roomreservation.config.ControllerTestContext;
 import com.gmail.buckartz.roomreservation.config.IntegrationWebTestConfiguration;
+import com.gmail.buckartz.roomreservation.mapping.employee.EmployeeDeserializeMapping;
+import com.gmail.buckartz.roomreservation.mapping.employee.mapper.EmployeeDeserializeMapper;
 import com.gmail.buckartz.roomreservation.mapping.room.RoomDeserializeMapping;
 import com.gmail.buckartz.roomreservation.mapping.room.mapper.RoomDeserializeMapper;
+import com.gmail.buckartz.roomreservation.service.employee.EmployeeService;
 import com.gmail.buckartz.roomreservation.service.room.RoomService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -23,11 +26,31 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationWebTestConfiguration
 @RunWith(SpringRunner.class)
 public class RoomGetControllerTests extends ControllerTestContext {
+    private final static String LOGIN = "my_login";
+    private final static String PASSWORD = "password";
+
     @Autowired
     private RoomService roomService;
 
     @Autowired
     private RoomDeserializeMapping roomMapping;
+
+    @Autowired
+    private EmployeeService employeeService;
+
+    @Autowired
+    private EmployeeDeserializeMapping employeeDeserializeMapping;
+
+    @Before
+    public void saveEmployee() {
+        EmployeeDeserializeMapper mapper = EmployeeDeserializeMapper.builder()
+                .firstName("Alex")
+                .lastName("Pit")
+                .login(LOGIN)
+                .password(PASSWORD)
+                .build();
+        employeeService.save(employeeDeserializeMapping.toObject(mapper));
+    }
 
     @Test
     public void getAllRoomDefault() throws Exception {
@@ -47,13 +70,10 @@ public class RoomGetControllerTests extends ControllerTestContext {
         roomService.save(roomMapping.toObject(roomDeserializeMapper2));
         roomService.save(roomMapping.toObject(roomDeserializeMapper3));
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Accept-Charset", "utf-8");
-
         getMockMvc().perform(get("/room")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .headers(headers))
+                .headers(authHeaders(LOGIN, PASSWORD)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()", is(3)))
                 .andDo(getDocumentHandler()
@@ -86,15 +106,12 @@ public class RoomGetControllerTests extends ControllerTestContext {
         roomService.save(roomMapping.toObject(roomDeserializeMapper2));
         roomService.save(roomMapping.toObject(roomDeserializeMapper3));
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Accept-Charset", "utf-8");
-
         getMockMvc().perform(get("/room")
                 .param("page", "2")
                 .param("size", "2")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .headers(headers))
+                .headers(authHeaders(LOGIN, PASSWORD)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalElements", is(3)))
                 .andExpect(jsonPath("$.content.length()", is(1)))

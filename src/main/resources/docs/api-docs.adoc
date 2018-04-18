@@ -44,12 +44,17 @@ Application adhere as closely as possible to standard HTTP and REST conventions 
 | `400 Bad Request`
 | The server cannot or will not process the request due to something that is perceived to be a client error (e.g., malformed request syntax, invalid request message framing, or deceptive request routing).
 
+| `401 Unauthorized`
+| The request was valid, but the server is refusing action. Authentication is required and has failed or has not yet been provided.
+
 | `404 Not Found`
 | The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.
 |===
 
 [room]
 == *Room*
+
+Any request about room must provide authentication of employee.
 
 [save-new-room]
 === Save new room
@@ -98,7 +103,10 @@ include::{snippets}/get-all-room-paging/http-response.adoc[]
 [save-new-employee]
 === Save new employee
 
-Save new employee in the system
+Save new employee in the system. Authentication isn't required.
+Use *login* and *password* to access other resources of this platform.
+
+Password saves with encoding.
 
 ==== _Request_
 include::{snippets}/save-employee/http-request.adoc[]
@@ -114,7 +122,7 @@ include::{snippets}/save-employee-with-not-unique-login/http-response.adoc[]
 [get-employee-by-id]
 === Get employee by id
 
-Request has the parameter *id*.
+Request has the parameter *id*. Authentication is required.
 
 ``
 /employee/{id}
@@ -134,7 +142,7 @@ include::{snippets}/get-employee-by-id-not-exist/http-response.adoc[]
 [get-all-employees]
 === Get all employees
 
-Get all employees saved in the system
+Get all employees saved in the system.  Authentication is required.
 
 ``
 /employee?page={page}&size={size}
@@ -158,6 +166,8 @@ include::{snippets}/get-all-employee-paging/http-response.adoc[]
 
 [room-reservation]
 == *Room reservation*
+
+Any request about room reservation must provide authentication of employee.
 
 [New-room-reservation]
 === New room reservation

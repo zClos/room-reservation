@@ -3,13 +3,16 @@ package com.gmail.buckartz.roomreservation.controller.room;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gmail.buckartz.roomreservation.config.ControllerTestContext;
 import com.gmail.buckartz.roomreservation.config.IntegrationWebTestConfiguration;
+import com.gmail.buckartz.roomreservation.mapping.employee.EmployeeDeserializeMapping;
+import com.gmail.buckartz.roomreservation.mapping.employee.mapper.EmployeeDeserializeMapper;
 import com.gmail.buckartz.roomreservation.mapping.room.RoomDeserializeMapping;
 import com.gmail.buckartz.roomreservation.mapping.room.mapper.RoomDeserializeMapper;
+import com.gmail.buckartz.roomreservation.service.employee.EmployeeService;
 import com.gmail.buckartz.roomreservation.service.room.RoomService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -23,6 +26,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationWebTestConfiguration
 @RunWith(SpringRunner.class)
 public class RoomSaveControllerTests extends ControllerTestContext {
+    private final static String LOGIN = "my_login";
+    private final static String PASSWORD = "password";
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -31,6 +37,22 @@ public class RoomSaveControllerTests extends ControllerTestContext {
 
     @Autowired
     private RoomDeserializeMapping roomMapping;
+    @Autowired
+    private EmployeeService employeeService;
+
+    @Autowired
+    private EmployeeDeserializeMapping employeeDeserializeMapping;
+
+    @Before
+    public void saveEmployee() {
+        EmployeeDeserializeMapper mapper = EmployeeDeserializeMapper.builder()
+                .firstName("Alex")
+                .lastName("Pit")
+                .login(LOGIN)
+                .password(PASSWORD)
+                .build();
+        employeeService.save(employeeDeserializeMapping.toObject(mapper));
+    }
 
     @Test
     public void saveRoom() throws Exception {
@@ -39,13 +61,10 @@ public class RoomSaveControllerTests extends ControllerTestContext {
                 .sitsCount(2)
                 .build();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Accept-Charset", "utf-8");
-
         getMockMvc().perform(post("/room")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .headers(headers)
+                .headers(authHeaders(LOGIN, PASSWORD))
                 .content(objectMapper.writeValueAsString(roomDeserializeMapper)))
                 .andExpect(status().isCreated())
                 .andDo(getDocumentHandler()
@@ -64,13 +83,10 @@ public class RoomSaveControllerTests extends ControllerTestContext {
                 .build();
         roomService.save(roomMapping.toObject(roomDeserializeMapper));
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Accept-Charset", "utf-8");
-
         getMockMvc().perform(post("/room")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .headers(headers)
+                .headers(authHeaders(LOGIN, PASSWORD))
                 .content(objectMapper.writeValueAsString(roomDeserializeMapper)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.fieldsViolations.number",
@@ -83,13 +99,10 @@ public class RoomSaveControllerTests extends ControllerTestContext {
                 .sitsCount(2)
                 .build();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Accept-Charset", "utf-8");
-
         getMockMvc().perform(post("/room")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .headers(headers)
+                .headers(authHeaders(LOGIN, PASSWORD))
                 .content(objectMapper.writeValueAsString(roomDeserializeMapper)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.fieldsViolations.number",
@@ -103,13 +116,10 @@ public class RoomSaveControllerTests extends ControllerTestContext {
                 .sitsCount(2)
                 .build();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Accept-Charset", "utf-8");
-
         getMockMvc().perform(post("/room")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .headers(headers)
+                .headers(authHeaders(LOGIN, PASSWORD))
                 .content(objectMapper.writeValueAsString(roomDeserializeMapper)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.fieldsViolations.number",
